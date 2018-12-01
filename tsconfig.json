@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "target": "es5",
+    "module": "commonjs",
+    "lib":    ["es2017", "dom"],
+
+    "strict": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "downlevelIteration": true,
+
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "typeRoots": [
+      "types",
+      "node_modules/@types"
+    ]
+  },
+
+  "include": [
+    "src/**/*",
+    "index.ts",
+    "types.ts"
+  ]
+}
