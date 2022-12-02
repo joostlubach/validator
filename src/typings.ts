@@ -29,7 +29,7 @@ export interface Type<T> {
   options:    TypeOptions<T>
   coerce:     (raw: any, result: ValidatorResult<any>, partial: boolean) => T | typeof INVALID
   serialize:  (value: T, parent?: any) => any
-  traverse?:  (value: T, path: string[], callback: TraverseCallback) => void | boolean
+  traverse?:  (value: T, path: string[], callback: TraverseCallback) => void
   validate?:  (raw: any, result: ValidatorResult<any>) => void | Promise<void>
 }
 
