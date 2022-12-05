@@ -91,8 +91,8 @@ export interface ValidatorResultSerialized {
 
 export interface ValidationError {
   path:     string | null
-  code?:    string | null
-  message?: string | null
+  code?:    string
+  message?: string
 }
 
 export type TraverseCallback = (value: any, path: string, type: Type<any>) => void | false | {set: any}
