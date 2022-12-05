@@ -49,7 +49,7 @@ export default class ValidatorResult<T> {
     })
   }
 
-  public addError(code: string | null | undefined, message: string | null = null) {
+  public addError(code?: string, message?: string) {
     this.errors.push({
       path: this.path ?? null,
       code,
