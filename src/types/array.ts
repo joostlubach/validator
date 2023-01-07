@@ -1,6 +1,6 @@
-import ValidatorResult from '../ValidatorResult'
-import { TypeOptions, Type, INVALID, COERCE, TraverseCallback, isSetResult } from '../typings'
 import { isArray, isFunction } from 'lodash'
+import { COERCE, INVALID, isSetResult, TraverseCallback, Type, TypeOptions } from '../typings'
+import ValidatorResult from '../ValidatorResult'
 
 export interface Options<T> extends TypeOptions<T[]> {
   itemType:     Type<T>
@@ -59,7 +59,7 @@ function array<T>(options: Options<T>): Type<T[]> {
       }
     },
 
-    async validate(value: any, result: ValidatorResult<any>): Promise<void> {
+    validate(value: any, result: ValidatorResult<any>) {
       if (!Array.isArray(value)) {
         result.addError('invalid_type', 'Expected an array')
         return
@@ -74,7 +74,7 @@ function array<T>(options: Options<T>): Type<T[]> {
 
       if (options.itemType != null) {
         for (const [index, item] of value.entries()) {
-          await result.validator.validateType(item, options.itemType, result.for(`${index}`))
+          result.validator.validateType(item, options.itemType, result.for(`${index}`))
         }
       }
     },

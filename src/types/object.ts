@@ -1,6 +1,17 @@
-import ValidatorResult from '../ValidatorResult'
-import { Type, TypeOptions, ObjectSchema, SchemaInstance, AnyObject, ObjectSchemaMap, INVALID, COERCE, TraverseCallback, isSetResult } from '../typings'
 import { isFunction, isObject, isPlainObject } from 'lodash'
+import {
+  AnyObject,
+  COERCE,
+  INVALID,
+  isSetResult,
+  ObjectSchema,
+  ObjectSchemaMap,
+  SchemaInstance,
+  TraverseCallback,
+  Type,
+  TypeOptions,
+} from '../typings'
+import ValidatorResult from '../ValidatorResult'
 
 export type Options = TypeOptions<AnyObject> & (
   | SchemalessOptions
@@ -158,7 +169,7 @@ export default function object(options: Options = {}): Type<AnyObject> {
       }
     },
 
-    async validate(value: any, result: ValidatorResult<any>): Promise<void> {
+    validate(value: any, result: ValidatorResult<any>) {
       if (!isObject(value)) {
         result.addError('invalid_type', 'Expected an object')
         return
@@ -172,18 +183,18 @@ export default function object(options: Options = {}): Type<AnyObject> {
       }
 
       if (schema != null) {
-        await validateObjectSchema(value, schema, result)
+        validateObjectSchema(value, schema, result)
       }
     },
 
   }
 }
 
-async function validateObjectSchema<S extends ObjectSchema>(
+function validateObjectSchema<S extends ObjectSchema>(
   value:   AnyObject,
   schema:  S,
   result: ValidatorResult<any>
-): Promise<void> {
+): void {
   checkMissing(value, schema, result)
 
   // Check the types
@@ -194,7 +205,7 @@ async function validateObjectSchema<S extends ObjectSchema>(
     }
     if (type == null) { continue }
 
-    await result.validator.validateType(value[name], type, result.for(name))
+    result.validator.validateType(value[name], type, result.for(name))
   }
 }
 

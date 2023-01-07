@@ -4,7 +4,7 @@ import Validator from './Validator'
 export default class ValidatorResult<T> {
 
   constructor(
-    public readonly validator: Validator<T>,
+    public readonly validator: Validator,
     private readonly parts: string[] = []
   ) {}
 
@@ -33,11 +33,11 @@ export default class ValidatorResult<T> {
   }
 
   private get errors() {
-    // Note: errors is private, but should be like library-private.
+    // Note: errors is protected, but should be like library-protected.
     return (this.validator as any).errors
   }
   private set errors(value: ValidationError[]) {
-    // Note: errors is private, but should be like library-private.
+    // Note: errors is protected, but should be like library-protected.
     (this.validator as any).errors = value
   }
 
