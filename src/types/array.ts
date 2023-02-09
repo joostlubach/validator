@@ -17,10 +17,6 @@ function array<T>(options: Options<T>): Type<T[]> {
       if (value != null && !isArray(value) && isFunction(value[COERCE])) {
         value = value[COERCE](this)
       }
-      if (options.coerce != null) {
-        value = options.coerce(value)
-      }
-
       if (!isArray(value)) { return INVALID }
 
       const coerced: T[] = []

@@ -2,6 +2,7 @@ import { isFunction, isObject, isPlainObject } from 'lodash'
 import {
   AnyObject,
   COERCE,
+  CustomCoerce,
   INVALID,
   isSetResult,
   ObjectSchema,
@@ -23,10 +24,12 @@ interface SchemalessOptions {}
 interface MonomorphicOptions<S extends ObjectSchema> {
   polymorphic?: false
   schema?:      S
+  coerce?:      CustomCoerce<AnyObject>
 }
 interface PolymorphicOptions<S extends ObjectSchemaMap> {
   polymorphic: true
   schemas:     S
+  coerce?:     CustomCoerce<AnyObject>
 }
 
 export default function object(options: Options = {}): Type<AnyObject> {

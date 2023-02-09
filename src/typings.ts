@@ -41,7 +41,6 @@ export interface TypeOptions<T> {
   default?:  any | (() => any)
 
   validate?: CustomValidator<T>
-  coerce?:   CustomCoerce<T>
 
   // A custom tag to identify this type.
   tag?: string
