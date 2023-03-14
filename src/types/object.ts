@@ -73,7 +73,7 @@ export default function object(options: Options = {}): Type<AnyObject> {
       let restType: Type<any> | undefined
 
       for (const name of schemaKeys(schema)) {
-        if (name === '__rest') {
+        if (name === REST_MARKER) {
           restType = schema[name]
           continue
         }
@@ -126,7 +126,7 @@ export default function object(options: Options = {}): Type<AnyObject> {
       const names = new Set(Object.keys(value))
 
       for (const [name, type] of Object.entries(schema)) {
-        if (name === '__rest') { continue }
+        if (name === REST_MARKER) { continue }
 
         if (value[name] !== undefined) {
           result[name] = value[name] == null
@@ -136,14 +136,14 @@ export default function object(options: Options = {}): Type<AnyObject> {
         names.delete(name)
       }
 
-      if (schema.__rest != null && names.size > 0) {
+      if (schema[REST_MARKER] != null && names.size > 0) {
         for (const name of names) {
           if (value[name] === undefined) {
             continue
           } else if (value[name] === null) {
             result[name] = null
           } else {
-            result[name] = schema.__rest.serialize(value[name])
+            result[name] = schema[REST_MARKER].serialize(value[name])
           }
         }
       }
@@ -203,8 +203,8 @@ function validateObjectSchema<S extends ObjectSchema>(
   // Check the types
   for (const name of Object.keys(value)) {
     let type = schema[name]
-    if (type == null && schema.__rest != null) {
-      type = schema.__rest
+    if (type == null && schema[REST_MARKER] != null) {
+      type = schema[REST_MARKER]
     }
     if (type == null) { continue }
 
@@ -218,7 +218,7 @@ function checkMissing<S extends ObjectSchema>(
   context:    ValidatorResult<any>
 ) {
   for (const name of schemaKeys(schema)) {
-    if (name === '__rest') { continue }
+    if (name === REST_MARKER) { continue }
 
     const type = schema[name]
     if (type.options.required === false || type.options.default != null) { continue }
@@ -231,3 +231,5 @@ function checkMissing<S extends ObjectSchema>(
 function schemaKeys(schema: ObjectSchema) {
   return Object.keys(schema)
 }
+
+export const REST_MARKER = '...'

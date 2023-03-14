@@ -1,6 +1,6 @@
 import { any } from 'validator/types'
 import { Type, TypeOptions } from '../typings'
-import object from './object'
+import object, { REST_MARKER } from './object'
 
 export interface Options extends TypeOptions<Record<string, any>> {
   valueType?: Type<any>
@@ -13,7 +13,7 @@ function dictionary(options: Options): Type<any> {
   } = options
   return object({
     schema: {
-      __rest: valueType,
+      [REST_MARKER]: valueType,
     },
     ...rest,
   } as any)
