@@ -1,5 +1,5 @@
+import { INVALID, Type, TypeOptions } from '../typings'
 import ValidatorResult from '../ValidatorResult'
-import { TypeOptions, Type, INVALID } from '../typings'
 
 export interface Options extends TypeOptions<string> {
   minLength?: number
@@ -19,9 +19,6 @@ function string(options: Options = {}): Type<string> {
       if (result.validator.options.trimStrings) {
         text = text.trim()
       }
-      if (options.required === false && value.length === 0 && options.default == null) {
-        return null as any
-      }
       if (options.transform != null) {
         return options.transform(text)
       }
@@ -36,11 +33,6 @@ function string(options: Options = {}): Type<string> {
     validate(value: any, result: ValidatorResult<any>) {
       if (typeof value !== 'string') {
         result.addError('invalid_type', 'Expected a string')
-        return
-      }
-
-      if (options.required !== false && value.length === 0) {
-        result.addError('required', `This value is required`)
         return
       }
 
