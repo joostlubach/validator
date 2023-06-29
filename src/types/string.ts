@@ -36,16 +36,27 @@ function string(options: Options = {}): Type<string> {
         return
       }
 
-      if (options.minLength != null && value.length < options.minLength) {
-        result.addError('string.too_short', `This value should be no shorter than ${options.minLength} character(s)`)
+      const {
+        minLength = options.required === false ? undefined : 1,
+        maxLength,
+        enum: enumValues,
+        match,
+      } = options
+
+      if (minLength != null && value.length < minLength) {
+        if (minLength === 1) {
+          result.addError('required', "This value is required")
+        } else {
+          result.addError('string.too_short', `This value should be no shorter than ${minLength} character(s)`)
+        }
       }
-      if (options.maxLength != null && value.length > options.maxLength) {
-        result.addError('string.too_long', `This value should be no longer than ${options.maxLength} character(s)`)
+      if (maxLength != null && value.length > maxLength) {
+        result.addError('string.too_long', `This value should be no longer than ${maxLength} character(s)`)
       }
-      if (options.enum != null && !options.enum.includes(value)) {
+      if (enumValues != null && !enumValues.includes(value)) {
         result.addError('string.not_in_enum', 'Invalid value')
       }
-      if (options.match != null && !options.match.test(value)) {
+      if (match != null && !match.test(value)) {
         result.addError('string.invalid', "This value is not correctly formatted")
       }
     },
