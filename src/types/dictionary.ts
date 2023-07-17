@@ -1,4 +1,4 @@
-import { any } from 'validator/types'
+import { any } from '../types'
 import { Type, TypeOptions } from '../typings'
 import object, { REST_MARKER } from './object'
 
