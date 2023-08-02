@@ -77,8 +77,6 @@ export type PolySchemaInstance<SM extends ObjectSchemaMap> = {
   [type in keyof SM]: {type: type} & SchemaInstance<SM[type]>
 }[keyof SM]
 
-export type AnyObject = Record<string, any>
-
 export type ValidateExtraFunction<T> = (result: ValidatorResult<T>) => void | Promise<void>
 export type CustomValidator<T>       = (value: T, result: ValidatorResult<any>) => void | Promise<void>
 export type CustomCoerce<T>          = (value: T) => T

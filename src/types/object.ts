@@ -1,6 +1,5 @@
 import { isFunction, isObject, isPlainObject } from 'lodash'
 import {
-  AnyObject,
   COERCE,
   CustomCoerce,
   INVALID,
@@ -14,7 +13,7 @@ import {
 } from '../typings'
 import ValidatorResult from '../ValidatorResult'
 
-export type Options = TypeOptions<AnyObject> & (
+export type Options = TypeOptions<Record<string, any>> & (
   | SchemalessOptions
   | MonomorphicOptions<any>
   | PolymorphicOptions<any>
@@ -24,20 +23,20 @@ interface SchemalessOptions {}
 interface MonomorphicOptions<S extends ObjectSchema> {
   polymorphic?: false
   schema?:      S
-  coerce?:      CustomCoerce<AnyObject>
+  coerce?:      CustomCoerce<Record<string, any>>
 }
 interface PolymorphicOptions<S extends ObjectSchemaMap> {
   polymorphic: true
   schemas:     S
-  coerce?:     CustomCoerce<AnyObject>
+  coerce?:     CustomCoerce<Record<string, any>>
 }
 
-export default function object(options: Options = {}): Type<AnyObject> {
+export default function object(options: Options = {}): Type<Record<string, any>> {
   const isPolymorphic      = 'polymorphic' in options && !!options.polymorphic
   const monomorphicOptions = options as MonomorphicOptions<any>
   const polymorphicOptions = options as PolymorphicOptions<any>
 
-  function getObjectSchema(value: AnyObject | null): ObjectSchema | null {
+  function getObjectSchema(value: Record<string, any> | null): ObjectSchema | null {
     if (value == null) { return null }
 
     if (isPolymorphic) {
@@ -69,7 +68,7 @@ export default function object(options: Options = {}): Type<AnyObject> {
         coerced.type = (value as any).type
       }
 
-      const remaining: AnyObject = {...value}
+      const remaining: Record<string, any> = {...value}
       let restType: Type<any> | undefined
 
       for (const name of schemaKeys(schema)) {
@@ -87,7 +86,7 @@ export default function object(options: Options = {}): Type<AnyObject> {
 
         delete remaining[name]
 
-        const withDefaults: AnyObject = {...value}
+        const withDefaults: Record<string, any> = {...value}
 
         // Check for a default.
         if (withDefaults[name] == null && type.options.default != null) {
@@ -114,11 +113,11 @@ export default function object(options: Options = {}): Type<AnyObject> {
       return coerced
     },
 
-    serialize(value: AnyObject): AnyObject {
+    serialize(value: Record<string, any>): Record<string, any> {
       const schema = getObjectSchema(value)
       if (schema == null) { return value }
 
-      const result: AnyObject = {}
+      const result: Record<string, any> = {}
       if (isPolymorphic) {
         result.type = value.type
       }
@@ -151,7 +150,7 @@ export default function object(options: Options = {}): Type<AnyObject> {
       return result
     },
 
-    traverse(value: AnyObject, path: string[], callback: TraverseCallback) {
+    traverse(value: Record<string, any>, path: string[], callback: TraverseCallback) {
       if (!isObject(value)) { return }
 
       for (const [propName, propValue] of Object.entries(value)) {
@@ -194,7 +193,7 @@ export default function object(options: Options = {}): Type<AnyObject> {
 }
 
 function validateObjectSchema<S extends ObjectSchema>(
-  value:   AnyObject,
+  value:   Record<string, any>,
   schema:  S,
   result: ValidatorResult<any>
 ): void {
@@ -213,7 +212,7 @@ function validateObjectSchema<S extends ObjectSchema>(
 }
 
 function checkMissing<S extends ObjectSchema>(
-  attributes: AnyObject,
+  attributes: Record<string, any>,
   schema:     S,
   context:    ValidatorResult<any>
 ) {
