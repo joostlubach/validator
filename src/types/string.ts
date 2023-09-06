@@ -1,36 +1,36 @@
 import { INVALID, Type, TypeOptions } from '../typings'
 import ValidatorResult from '../ValidatorResult'
 
-export interface Options extends TypeOptions<string> {
+export interface StringOptions<T extends string> extends TypeOptions<T> {
   minLength?: number
   maxLength?: number
-  enum?:      string[]
+  enum?:      T[]
   match?:     RegExp
-  transform?: (value: string) => string
+  transform?: (value: string) => T
 }
 
-function string(options: Options = {}): Type<string> {
+function string<T extends string>(options: StringOptions<T> = {}): Type<T> {
   return {
     name: 'string',
     options,
 
-    coerce(value: any, result: ValidatorResult<any>): string | INVALID {
+    coerce(value: any, result: ValidatorResult<any>): T | INVALID {
       let text = value == null ? '' : `${value}`
       if (result.validator.options.trimStrings) {
         text = text.trim()
       }
       if (options.transform != null) {
         return options.transform(text)
+      } else {
+        return text as T
       }
-
-      return text
     },
 
     serialize(value: string) {
       return value
     },
 
-    validate(value: any, result: ValidatorResult<any>) {
+    validate(value: T, result: ValidatorResult<any>) {
       if (typeof value !== 'string') {
         result.addError('invalid_type', 'Expected a string')
         return

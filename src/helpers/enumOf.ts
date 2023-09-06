@@ -1,17 +1,11 @@
+import { AnyEnumType, EnumUtil } from 'ytil'
 import { string, StringOptions } from '../types'
-import { ObjectSchema, SchemaInstance, Type, TypeOptions } from '../typings'
+import { TypeCreator } from '../typings'
 
-type ObjectTypeCreator<S extends ObjectSchema> =
-  (options?: TypeOptions<SchemaInstance<S>>) => Type<SchemaInstance<S>>
-
-export default function enumOf<S extends ObjectSchema>(enumLike: Record<string, any>, defaultOptions: StringOptions = {}): ObjectTypeCreator<S> {
-  return (options = {}) => string({
-    enum: enumValues(enumLike),
+export default function enumOf<E extends string & AnyEnumType>(Enum: E, defaultOptions: StringOptions<E> = {}): TypeCreator<E> {
+  return (options = {}) => string<E>({
+    enum: EnumUtil.values(Enum),
     ...defaultOptions,
-    ...options as any,
-  }) as any
-}
-
-function enumValues(enumLike: Record<string, any>) {
-  return Object.values(enumLike)
+    ...options,
+  })
 }

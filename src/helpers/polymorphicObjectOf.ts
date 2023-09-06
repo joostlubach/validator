@@ -1,16 +1,19 @@
 import { object } from '../types'
-import { ObjectSchema, Type, TypeOptions } from '../typings'
+import {
+  ObjectSchema,
+  ObjectSchemaMap,
+  PolySchemaInstance,
+  TypeCreator,
+  TypeOptions,
+} from '../typings'
 
-type PolymorphicObjectTypeCreator<T> =
-  (options?: TypeOptions<Record<string, any> & {type: T}> & {extra?: ObjectSchema}) => Type<Record<string, any> & {type: T}>
-
-export default function polymorphicObjectOf<T extends string>(schemas: Record<T, ObjectSchema>): PolymorphicObjectTypeCreator<T> {
+export default function polymorphicObjectOf<T>(schemas: Record<string, ObjectSchema>, defaults?: TypeOptions<T>): TypeCreator<T>
+export default function polymorphicObjectOf<SM extends ObjectSchemaMap>(schemas: SM, defaults?: TypeOptions<PolySchemaInstance<SM>>): TypeCreator<PolySchemaInstance<SM>>
+export default function polymorphicObjectOf(schemas: Record<string, ObjectSchema>, defaults?: TypeOptions<any>): TypeCreator<any> {
   return (options = {}) => object({
     polymorphic: true,
-    schemas: Object.entries<ObjectSchema>(schemas).reduce((acc, [type, schema]) => ({
-      ...acc,
-      [type]: {...schema, ...options.extra}
-    }), {}),
-    ...options as any,
-  }) as any
+    schemas,
+    ...defaults,
+    ...options,
+  })
 }

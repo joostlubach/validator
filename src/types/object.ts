@@ -1,11 +1,11 @@
 import { isFunction, isObject, isPlainObject } from 'lodash'
 import {
   COERCE,
-  CustomCoerce,
   INVALID,
   isSetResult,
   ObjectSchema,
   ObjectSchemaMap,
+  PolySchemaInstance,
   SchemaInstance,
   TraverseCallback,
   Type,
@@ -13,25 +13,25 @@ import {
 } from '../typings'
 import ValidatorResult from '../ValidatorResult'
 
-export type Options = TypeOptions<Record<string, any>> & (
-  | SchemalessOptions
+export type ObjectOptions<T> = (
+  | TypeOptions<T>
   | MonomorphicOptions<any>
   | PolymorphicOptions<any>
 )
 
-interface SchemalessOptions {}
-interface MonomorphicOptions<S extends ObjectSchema> {
+export interface MonomorphicOptions<S extends ObjectSchema> extends TypeOptions<SchemaInstance<S>> {
   polymorphic?: false
   schema?:      S
-  coerce?:      CustomCoerce<Record<string, any>>
 }
-interface PolymorphicOptions<S extends ObjectSchemaMap> {
+export interface PolymorphicOptions<SM extends ObjectSchemaMap> extends TypeOptions<PolySchemaInstance<SM>> {
   polymorphic: true
-  schemas:     S
-  coerce?:     CustomCoerce<Record<string, any>>
+  schemas:     SM
 }
 
-export default function object(options: Options = {}): Type<Record<string, any>> {
+export default function object<T extends Record<string, any>>(options?: ObjectOptions<T>): Type<T>
+export default function object<S extends ObjectSchema>(options: MonomorphicOptions<S>): Type<SchemaInstance<S>>
+export default function object<SM extends ObjectSchemaMap>(options: PolymorphicOptions<SM>): Type<PolySchemaInstance<SM>>
+export default function object(options: ObjectOptions<any> = {}): Type<any> {
   const isPolymorphic      = 'polymorphic' in options && !!options.polymorphic
   const monomorphicOptions = options as MonomorphicOptions<any>
   const polymorphicOptions = options as PolymorphicOptions<any>
@@ -50,7 +50,7 @@ export default function object(options: Options = {}): Type<Record<string, any>>
     name: 'object',
     options,
 
-    coerce(value: any, result: ValidatorResult<any>, partial: boolean): SchemaInstance<any> | INVALID {
+    coerce(value: any, result: ValidatorResult<any>, partial: boolean): Record<string, any> | INVALID {
       if (value != null && !isPlainObject(value) && isFunction(value[COERCE])) {
         value = value[COERCE](this)
       }

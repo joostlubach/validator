@@ -1,8 +1,8 @@
-import { TypeOptions, Type } from '../typings'
+import { Type, TypeOptions } from '../typings'
 
-export type Options = TypeOptions<any>
+export type AnyOptions = TypeOptions<any>
 
-function any(options: Options = {}): Type<any> {
+export default function any(options: AnyOptions = {}): Type<any> {
   return {
     name: 'any',
     options,
@@ -16,5 +16,3 @@ function any(options: Options = {}): Type<any> {
     },
   }
 }
-
-export default any

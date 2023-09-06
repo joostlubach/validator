@@ -1,9 +1,6 @@
-import { TypeOptions, Type } from '../typings'
-import { array } from '../types'
+import { array, ArrayOptions } from '../types'
+import { Type, TypeCreator } from '../typings'
 
-type ArrayTypeCreator<T> =
-  (options?: TypeOptions<T[]>) => Type<T[]>
-
-export default function arrayOf<T>(itemType: Type<T>): ArrayTypeCreator<T> {
-  return (options = {}) => array({itemType, ...options as any})
+export default function arrayOf<T>(itemType: Type<T>, defaults?: ArrayOptions<T>): TypeCreator<T[]> {
+  return (options = {}) => array({itemType, ...defaults, ...options})
 }

@@ -33,20 +33,23 @@ export interface Type<T> {
   validate?:  (raw: any, result: ValidatorResult<any>) => void
 }
 
+export type TypeCreator<T> = (
+  & ((options: TypeOptions<T> & {required: false}) => Type<T | null>)
+  & ((options?: TypeOptions<T>) => Type<T>)
+)
+
 export const INVALID = Symbol('INVALID')
 export type INVALID = typeof INVALID
 
 export interface TypeOptions<T> {
   required?: boolean
-  default?:  any | (() => any)
+  default?:  T | (() => T)
 
   validate?: CustomValidator<T>
+  coerce?:   CustomCoerce<T>
 
   // A custom tag to identify this type.
   tag?: string
-
-  // Other libraries may add additional options
-  [key: string]: any
 }
 
 export type ObjectSchema = {
@@ -64,8 +67,6 @@ export type ValueOf<T extends Type<any>> =
       ? U | null
       : U
     : never
-
-export type SchemaType<S extends ObjectSchema, K extends keyof S> = ValueOf<S[K]>
 
 /** Retrieves a full object type given an object schema. */
 export type SchemaInstance<S extends ObjectSchema> = {

@@ -1,13 +1,13 @@
+import { INVALID, Type, TypeOptions } from '../typings'
 import ValidatorResult from '../ValidatorResult'
-import { TypeOptions, Type, INVALID } from '../typings'
 
-export interface Options extends TypeOptions<number> {
+export interface NumberOptions extends TypeOptions<number> {
   integer?: boolean
   min?:     number
   max?:     number
 }
 
-function number(options: Options = {}): Type<number> {
+export default function number(options: NumberOptions = {}): Type<number> {
   return {
     name: 'number',
     options,
@@ -42,5 +42,3 @@ function number(options: Options = {}): Type<number> {
     },
   }
 }
-
-export default number

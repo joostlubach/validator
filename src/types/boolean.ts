@@ -1,9 +1,9 @@
+import { INVALID, Type, TypeOptions } from '../typings'
 import ValidatorResult from '../ValidatorResult'
-import { TypeOptions, Type, INVALID } from '../typings'
 
-export type Options = TypeOptions<boolean>
+export type BooleanOptions = TypeOptions<boolean>
 
-function boolean(options: Options = {}): Type<boolean> {
+export default function boolean(options: BooleanOptions = {}): Type<boolean> {
   return {
     name: 'boolean',
     options,
@@ -23,5 +23,3 @@ function boolean(options: Options = {}): Type<boolean> {
     },
   }
 }
-
-export default boolean

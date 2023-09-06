@@ -1,9 +1,6 @@
 import { dictionary } from '../types'
-import { Type, TypeOptions } from '../typings'
+import { Type, TypeCreator, TypeOptions } from '../typings'
 
-type ArrayTypeCreator<T> =
-  (options?: TypeOptions<T[]>) => Type<T[]>
-
-export default function dictionaryOf<T>(valueType: Type<T>): ArrayTypeCreator<T> {
-  return (options = {}) => dictionary({valueType, ...options as any})
+export default function dictionaryOf<T>(valueType: Type<T>, defaults: TypeOptions<Record<string, T>>): TypeCreator<Record<string, T>> {
+  return (options = {}) => dictionary<T>({valueType, ...defaults, ...options})
 }

@@ -2,13 +2,13 @@ import { isArray, isFunction } from 'lodash'
 import { COERCE, INVALID, isSetResult, TraverseCallback, Type, TypeOptions } from '../typings'
 import ValidatorResult from '../ValidatorResult'
 
-export interface Options<T> extends TypeOptions<T[]> {
+export interface ArrayOptions<T> extends TypeOptions<T[]> {
   itemType:     Type<T>
   minElements?: number
   maxElements?: number
 }
 
-function array<T>(options: Options<T>): Type<T[]> {
+export default function array<T>(options: ArrayOptions<T>): Type<T[]> {
   return {
     name: 'array',
     options,
@@ -76,5 +76,3 @@ function array<T>(options: Options<T>): Type<T[]> {
     },
   }
 }
-
-export default array

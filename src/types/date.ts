@@ -1,13 +1,13 @@
-import ValidatorResult from '../ValidatorResult'
-import { TypeOptions, Type, INVALID } from '../typings'
 import { isDate } from 'lodash'
+import { INVALID, Type, TypeOptions } from '../typings'
+import ValidatorResult from '../ValidatorResult'
 
-export interface Options extends TypeOptions<Date> {
+export interface DateOptions extends TypeOptions<Date> {
   after?:  Date
   before?: Date
 }
 
-function date(options: Options = {}): Type<Date> {
+export default function date(options: DateOptions = {}): Type<Date> {
   return {
     name: 'date',
     options,
@@ -41,5 +41,3 @@ function date(options: Options = {}): Type<Date> {
     },
   }
 }
-
-export default date
