@@ -1,6 +1,6 @@
 import { isDate } from 'lodash'
-import { defineType } from '../helpers'
 import { INVALID, TypeOptions } from '../typings'
+import { defineType } from '../util'
 import ValidatorResult from '../ValidatorResult'
 
 export interface DateOptions extends TypeOptions<Date> {

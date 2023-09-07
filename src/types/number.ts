@@ -1,5 +1,5 @@
-import { defineType } from '../helpers'
 import { INVALID, TypeOptions } from '../typings'
+import { defineType } from '../util'
 import ValidatorResult from '../ValidatorResult'
 
 export interface NumberOptions extends TypeOptions<number> {

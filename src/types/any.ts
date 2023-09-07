@@ -1,5 +1,5 @@
-import { defineType } from '../helpers/defineType'
 import { TypeOptions } from '../typings'
+import { defineType } from '../util/defineType'
 
 export type AnyOptions = TypeOptions<any>
 

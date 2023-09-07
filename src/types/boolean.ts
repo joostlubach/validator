@@ -1,5 +1,5 @@
-import { defineType } from '../helpers'
 import { TypeOptions } from '../typings'
+import { defineType } from '../util'
 
 export type BooleanOptions = TypeOptions<boolean>
 
