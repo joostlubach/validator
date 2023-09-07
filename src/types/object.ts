@@ -4,7 +4,9 @@ import {
   isSetResult,
   ObjectSchema,
   ObjectSchemaMap,
+  OptionalType,
   PolySchemaInstance,
+  RequiredType,
   SchemaInstance,
   Type,
   TypeOptions,
@@ -12,10 +14,12 @@ import {
 import ValidatorResult from '../ValidatorResult'
 
 export type ObjectOptions<T> = (
-  | TypeOptions<T>
+  | AnonymousObjectOptions<T>
   | MonomorphicOptions<any>
   | PolymorphicOptions<any>
 )
+
+export type AnonymousObjectOptions<T> = TypeOptions<T>
 
 export interface MonomorphicOptions<S extends ObjectSchema> extends TypeOptions<SchemaInstance<S>> {
   polymorphic?: false
@@ -26,13 +30,13 @@ export interface PolymorphicOptions<SM extends ObjectSchemaMap> extends TypeOpti
   schemas:     SM
 }
 
-export default function object<T extends Record<string, any>>(options: ObjectOptions<T> & {required: false}): Type<T | null>
-export default function object<S extends ObjectSchema>(options: MonomorphicOptions<S> & {required: false}): Type<SchemaInstance<S> | null>
-export default function object<SM extends ObjectSchemaMap>(options: PolymorphicOptions<SM> & {required: false}): Type<PolySchemaInstance<SM> | null>
+export default function object<T extends Record<string, any>>(options: AnonymousObjectOptions<T> & {required: false}): OptionalType<T, AnonymousObjectOptions<T>>
+export default function object<S extends ObjectSchema>(options: MonomorphicOptions<S> & {required: false}): OptionalType<SchemaInstance<S>, MonomorphicOptions<S>>
+export default function object<SM extends ObjectSchemaMap>(options: PolymorphicOptions<SM> & {required: false}): OptionalType<PolySchemaInstance<SM>, PolymorphicOptions<SM>>
 
-export default function object<T extends Record<string, any>>(options?: ObjectOptions<T>): Type<T>
-export default function object<S extends ObjectSchema>(options: MonomorphicOptions<S>): Type<SchemaInstance<S>>
-export default function object<SM extends ObjectSchemaMap>(options: PolymorphicOptions<SM>): Type<PolySchemaInstance<SM>>
+export default function object<T extends Record<string, any>>(options?: AnonymousObjectOptions<T>): RequiredType<T, AnonymousObjectOptions<T>>
+export default function object<S extends ObjectSchema>(options: MonomorphicOptions<S>): RequiredType<SchemaInstance<S>, MonomorphicOptions<S>>
+export default function object<SM extends ObjectSchemaMap>(options: PolymorphicOptions<SM>): RequiredType<PolySchemaInstance<SM>, PolymorphicOptions<SM>>
 
 export default function object(options: ObjectOptions<any> = {}): Type<any> {
   const isPolymorphic      = 'polymorphic' in options && !!options.polymorphic

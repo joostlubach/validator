@@ -88,7 +88,10 @@ export interface ObjectSchemaMap {
 }
 
 /** Extracts the actual type of a dynamic Type definition. */
-export type ValueTypeOf<T extends Type<any>> = T extends Type<infer U> ? U : never
+export type ValueTypeOf<T extends Type<any>> =
+  T extends RequiredType<infer U, any> ? U :
+  T extends OptionalType<infer U, any> ? U | null :
+  never
 
 /** Retrieves a full object type given an object schema. */
 export type SchemaInstance<S extends ObjectSchema> = {

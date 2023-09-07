@@ -1,4 +1,4 @@
-import { Type, TypeOptions } from '../typings'
+import { OptionalType, RequiredType, Type, TypeOptions } from '../typings'
 
 export interface StringOptions<T extends string = string> extends TypeOptions<T> {
   minLength?: number
@@ -9,11 +9,11 @@ export interface StringOptions<T extends string = string> extends TypeOptions<T>
   transform?: (value: string) => T
 }
 
-function string(options: StringOptions & {required: false}): Type<string | null>
-function string(options?: StringOptions): Type<string>
+function string(options: StringOptions & {required: false}): OptionalType<string, StringOptions>
+function string(options?: StringOptions): RequiredType<string, StringOptions>
 
-function string<T extends string>(options: StringOptions<T> & {required: false}): Type<T | null>
-function string<T extends string>(options?: StringOptions<T>): Type<T>
+function string<T extends string>(options: StringOptions<T> & {required: false}): OptionalType<T, StringOptions<T>>
+function string<T extends string>(options?: StringOptions<T>): RequiredType<T, StringOptions<T>>
 
 function string(options: StringOptions<any> = {}): Type<any> {
   return {
