@@ -1,5 +1,8 @@
-export { default as arrayOf } from './arrayOf'
-export { default as dictionaryOf } from './dictionaryOf'
-export { default as enumOf } from './enumOf'
-export { default as objectOf } from './objectOf'
-export { default as polymorphicObjectOf } from './polymorphicObjectOf'
+// @index: export * from ${relpath}
+export * from './arrayOf'
+export * from './defineType'
+export * from './dictionaryOf'
+export * from './enumOf'
+export * from './objectOf'
+export * from './polymorphicObjectOf'
+// /index

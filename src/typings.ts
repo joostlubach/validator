@@ -33,9 +33,9 @@ export interface Type<T> {
   validate?:  (raw: any, result: ValidatorResult<any>) => void
 }
 
-export type TypeCreator<T> = (
-  & ((options: TypeOptions<T> & {required: false}) => Type<T | null>)
-  & ((options?: TypeOptions<T>) => Type<T>)
+export type TypeCreator<T, Opts = TypeOptions<T>> = (
+  & ((options: Opts & {required: false}) => Type<T | null>)
+  & ((options?: Opts) => Type<T>)
 )
 
 export const INVALID = Symbol('INVALID')
@@ -52,6 +52,24 @@ export interface TypeOptions<T> {
   tag?: string
 }
 
+export interface TypeFnWithoutOpts<T, Opts extends TypeOptions<T>> {
+  (options: Opts & {required: false}): Type<T | null>
+  (options?: Opts): Type<T>
+}
+
+export interface TypeFnWithOpts<T, Opts extends TypeOptions<T>> {
+  (options: Opts & {required: false}): Type<T | null>
+  (options: Opts): Type<T>
+}
+
+export type TypeFn<T, Opts extends TypeOptions<T>> =
+  {} extends RequiredPartOf<Opts> ? TypeFnWithoutOpts<T, Opts> : TypeFnWithOpts<T, Opts>
+
+type RequiredKeysOf<T> = {
+  [K in keyof T]-?: {} extends Pick<T, K> ? never : K
+}[keyof T]
+type RequiredPartOf<T> = Pick<T, RequiredKeysOf<T>>
+
 export type ObjectSchema = {
   [attribute: string]: Type<any>
 }
@@ -61,16 +79,11 @@ export interface ObjectSchemaMap {
 }
 
 /** Extracts the actual type of a dynamic Type definition. */
-export type ValueOf<T extends Type<any>> =
-  T extends Type<infer U>
-    ? T['options'] extends {required: false}
-      ? U | null
-      : U
-    : never
+export type ValueTypeOf<T extends Type<any>> = T extends Type<infer U> ? U : never
 
 /** Retrieves a full object type given an object schema. */
 export type SchemaInstance<S extends ObjectSchema> = {
-  [name in keyof S]: ValueOf<S[name]>
+  [name in keyof S]: ValueTypeOf<S[name]>
 }
 
 /** Retrieves a dynamic polymorphic schema instance. It changes based on the value of its 'type' property. */
@@ -98,5 +111,3 @@ export type TraverseCallback = (value: any, path: string, type: Type<any>) => vo
 export function isSetResult(result: void | false | {set: any}): result is {set: any} {
   return isPlainObject(result)
 }
-
-export const COERCE = Symbol('validator.coerce')

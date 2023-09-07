@@ -1,6 +1,11 @@
 import { dictionary } from '../types'
+import { DictionaryOptions } from '../types/dictionary'
 import { Type, TypeCreator, TypeOptions } from '../typings'
 
-export default function dictionaryOf<T>(valueType: Type<T>, defaults: TypeOptions<Record<string, T>>): TypeCreator<Record<string, T>> {
-  return (options = {}) => dictionary<T>({valueType, ...defaults, ...options})
+export function dictionaryOf(valueType: Type<any>, defaults: DictionaryOptions<any> = {}): TypeCreator<Record<string, any> | null> {
+  return (options = {}) => dictionary({
+    valueType,
+    ...defaults,
+    ...options
+  })
 }

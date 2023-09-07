@@ -1,25 +1,17 @@
-import { INVALID, Type, TypeOptions } from '../typings'
-import ValidatorResult from '../ValidatorResult'
+import { defineType } from '../helpers'
+import { TypeOptions } from '../typings'
 
 export type BooleanOptions = TypeOptions<boolean>
 
-export default function boolean(options: BooleanOptions = {}): Type<boolean> {
-  return {
-    name: 'boolean',
-    options,
+const boolean = defineType<boolean, BooleanOptions>('boolean', () => ({
+  coerce:    value => !!value,
+  serialize: value => value,
 
-    coerce(value: any): boolean | INVALID {
-      return !!value
-    },
+  validate(value, result) {
+    if (typeof value !== 'boolean') {
+      result.addError('invalid_type', 'Expected a boolean')
+    }
+  },
+}))
 
-    serialize(value: boolean) {
-      return value
-    },
-
-    validate(value: any, result: ValidatorResult<any>) {
-      if (typeof value !== 'boolean') {
-        result.addError('invalid_type', 'Expected a boolean')
-      }
-    },
-  }
-}
+export default boolean

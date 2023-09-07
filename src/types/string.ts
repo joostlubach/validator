@@ -9,7 +9,9 @@ export interface StringOptions<T extends string> extends TypeOptions<T> {
   transform?: (value: string) => T
 }
 
-function string<T extends string>(options: StringOptions<T> = {}): Type<T> {
+function string<T extends string>(options: StringOptions<T> & {required: false}): Type<T[] | null>
+function string<T extends string>(options: StringOptions<T>): Type<T[]>
+function string<T extends string>(options: StringOptions<any>): Type<any> {
   return {
     name: 'string',
     options,

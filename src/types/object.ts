@@ -1,6 +1,5 @@
-import { isFunction, isObject, isPlainObject } from 'lodash'
+import { isFunction, isObject } from 'lodash'
 import {
-  COERCE,
   INVALID,
   isSetResult,
   ObjectSchema,
@@ -28,9 +27,14 @@ export interface PolymorphicOptions<SM extends ObjectSchemaMap> extends TypeOpti
   schemas:     SM
 }
 
+export default function object<T extends Record<string, any>>(options: ObjectOptions<T> & {required: false}): Type<T | null>
+export default function object<S extends ObjectSchema>(options: MonomorphicOptions<S> & {required: false}): Type<SchemaInstance<S> | null>
+export default function object<SM extends ObjectSchemaMap>(options: PolymorphicOptions<SM> & {required: false}): Type<PolySchemaInstance<SM> | null>
+
 export default function object<T extends Record<string, any>>(options?: ObjectOptions<T>): Type<T>
 export default function object<S extends ObjectSchema>(options: MonomorphicOptions<S>): Type<SchemaInstance<S>>
 export default function object<SM extends ObjectSchemaMap>(options: PolymorphicOptions<SM>): Type<PolySchemaInstance<SM>>
+
 export default function object(options: ObjectOptions<any> = {}): Type<any> {
   const isPolymorphic      = 'polymorphic' in options && !!options.polymorphic
   const monomorphicOptions = options as MonomorphicOptions<any>
@@ -51,9 +55,6 @@ export default function object(options: ObjectOptions<any> = {}): Type<any> {
     options,
 
     coerce(value: any, result: ValidatorResult<any>, partial: boolean): Record<string, any> | INVALID {
-      if (value != null && !isPlainObject(value) && isFunction(value[COERCE])) {
-        value = value[COERCE](this)
-      }
       if (options.coerce != null) {
         value = options.coerce(value)
       }

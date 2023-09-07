@@ -1,18 +1,11 @@
-import { Type, TypeOptions } from '../typings'
+import { defineType } from '../helpers/defineType'
+import { TypeOptions } from '../typings'
 
 export type AnyOptions = TypeOptions<any>
 
-export default function any(options: AnyOptions = {}): Type<any> {
-  return {
-    name: 'any',
-    options,
+const any = defineType<any, AnyOptions>('any', () => ({
+  coerce:    value => value,
+  serialize: value => value,
+}))
 
-    coerce(value: any) {
-      return value
-    },
-
-    serialize(value: any) {
-      return value
-    },
-  }
-}
+export default any

@@ -1,6 +1,5 @@
-import { isArray, isFunction } from 'lodash'
-import { COERCE, INVALID, isSetResult, TraverseCallback, Type, TypeOptions } from '../typings'
-import ValidatorResult from '../ValidatorResult'
+import { isArray } from 'lodash'
+import { INVALID, isSetResult, Type, TypeOptions } from '../typings'
 
 export interface ArrayOptions<T> extends TypeOptions<T[]> {
   itemType:     Type<T>
@@ -8,25 +7,24 @@ export interface ArrayOptions<T> extends TypeOptions<T[]> {
   maxElements?: number
 }
 
-export default function array<T>(options: ArrayOptions<T>): Type<T[]> {
+function array<T>(options: ArrayOptions<T> & {required: false}): Type<T[] | null>
+function array<T>(options: ArrayOptions<T>): Type<T[]>
+function array(options: ArrayOptions<any>): Type<any> {
   return {
     name: 'array',
     options,
 
-    coerce(value: any, result: ValidatorResult<any>, partial: boolean): T[] | INVALID {
-      if (value != null && !isArray(value) && isFunction(value[COERCE])) {
-        value = value[COERCE](this)
-      }
+    coerce: (value, result, partial) => {
       if (!isArray(value)) { return INVALID }
 
-      const coerced: T[] = []
+      const coerced: any[] = []
       for (const element of value) {
-        coerced.push(options.itemType.coerce(element, result, partial) as T)
+        coerced.push(options.itemType.coerce(element, result, partial))
       }
       return coerced
     },
 
-    serialize(value: T[]): any {
+    serialize: value => {
       if (!isArray(value)) { return INVALID }
 
       return value.map(element => {
@@ -38,7 +36,7 @@ export default function array<T>(options: ArrayOptions<T>): Type<T[]> {
       })
     },
 
-    traverse(value: T[], path: string[], callback: TraverseCallback) {
+    traverse: (value, path, callback) => {
       if (!isArray(value)) { return }
 
       for (const [index, propValue] of value.entries()) {
@@ -55,7 +53,7 @@ export default function array<T>(options: ArrayOptions<T>): Type<T[]> {
       }
     },
 
-    validate(value: any, result: ValidatorResult<any>) {
+    validate: (value, result) => {
       if (!Array.isArray(value)) {
         result.addError('invalid_type', 'Expected an array')
         return
@@ -76,3 +74,5 @@ export default function array<T>(options: ArrayOptions<T>): Type<T[]> {
     },
   }
 }
+
+export default array
