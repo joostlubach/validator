@@ -1,8 +1,8 @@
 import object, { MonomorphicOptions } from '../types/object'
-import { ObjectSchema, SchemaInstance, TypeCreator, TypeOptions } from '../typings'
+import { ObjectSchema, SchemaInstance, Type, TypeFn, TypeOptions } from '../typings'
 
-export function objectOf<T>(schema: ObjectSchema, defaults?: TypeOptions<T>): TypeCreator<T>
-export function objectOf<S extends ObjectSchema>(schema: S, defaults?: MonomorphicOptions<S>): TypeCreator<SchemaInstance<S>>
+export function objectOf<S extends ObjectSchema>(schema: S): TypeFn<SchemaInstance<S>, MonomorphicOptions<S>>
+export function objectOf<T>(schema: ObjectSchema, defaults?: TypeOptions<T>): TypeFn<T, TypeOptions<T>>
 export function objectOf(schema: ObjectSchema, defaults: TypeOptions<any> = {}) {
   return (options = {}) => object<any>({
     schema,

@@ -9,19 +9,17 @@ export interface DateOptions extends TypeOptions<Date> {
 }
 
 const date = defineType<Date, DateOptions>('date', (options: DateOptions) => ({
-  coerce(value: any): Date | INVALID {
-    if (isDate(value)) { return value }
+  coerce: raw => {
+    if (isDate(raw)) { return raw }
 
-    if (typeof value === 'number' || typeof value === 'string') {
-      return new Date(value)
+    if (typeof raw === 'number' || typeof raw === 'string') {
+      return new Date(raw)
     } else {
       return INVALID
     }
   },
 
-  serialize(value: Date) {
-    return value
-  },
+  serialize: value => value,
 
   validate(value: any, result: ValidatorResult<any>) {
     if (!(value instanceof Date) || isNaN(value.getTime())) {

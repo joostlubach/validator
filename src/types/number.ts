@@ -8,8 +8,8 @@ export interface NumberOptions extends TypeOptions<number> {
   max?:     number
 }
 
-const number = defineType('number', (options: NumberOptions) => ({
-  coerce(value: any): number | INVALID {
+const number = defineType<number, NumberOptions>('number', options => ({
+  coerce: value => {
     if (value === INVALID) { return INVALID }
 
     const num = options.integer ? parseInt(value, 10) : parseFloat(value)
@@ -17,9 +17,7 @@ const number = defineType('number', (options: NumberOptions) => ({
     return num
   },
 
-  serialize(value: number) {
-    return value
-  },
+  serialize: value => value,
 
   validate(value: any, result: ValidatorResult<any>) {
     if (typeof value !== 'number' || !Number.isFinite(value)) {

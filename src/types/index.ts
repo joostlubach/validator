@@ -9,13 +9,13 @@ export { default as object } from './object'
 export { default as string } from './string'
 // /index
 
-// @index: export type { ${variable:pascal}Options } from ${relpath}
-export type { AnyOptions } from './any'
-export type { ArrayOptions } from './array'
-export type { BooleanOptions } from './boolean'
-export type { DateOptions } from './date'
-export type { DictionaryOptions } from './dictionary'
-export type { NumberOptions } from './number'
-export type { ObjectOptions } from './object'
-export type { StringOptions } from './string'
+// @index: export * from ${relpath}
+export * from './any'
+export * from './array'
+export * from './boolean'
+export * from './date'
+export * from './dictionary'
+export * from './number'
+export * from './object'
+export * from './string'
 // /index

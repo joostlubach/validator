@@ -1,5 +1,14 @@
 import { isFunction } from 'lodash'
-import { INVALID, Options, Type, ValidateExtraFunction, ValidationError } from './typings'
+import {
+  INVALID,
+  OptionalType,
+  Options,
+  RequiredType,
+  Type,
+  TypeOptions,
+  ValidateExtraFunction,
+  ValidationError,
+} from './typings'
 import ValidatorResult from './ValidatorResult'
 
 export default class Validator {
@@ -11,9 +20,16 @@ export default class Validator {
   protected errors: ValidationError[] = []
   public options: Required<Options>
 
-  public coerce<T>(raw: any, type: Type<T>, partial: boolean): T | INVALID {
+  public coerce<T>(raw: any, type: RequiredType<T, TypeOptions<T>>, partial: boolean): T | INVALID
+  public coerce<T>(raw: any, type: OptionalType<T, TypeOptions<T>>, partial: boolean): T | INVALID | null
+  public coerce<T>(raw: any, type: Type<T>, partial: boolean): T | INVALID | null {
     const result = new ValidatorResult(this)
-    return type.coerce(raw, result, partial)
+
+    if (type.options.coerce != null) {
+      return type.options.coerce(raw)
+    } else {
+      return type.coerce(raw, result, partial)
+    }
   }
 
   public async validate<T>(data: T, type: Type<T>, validateExtra?: ValidateExtraFunction<T>): Promise<ValidatorResult<T>> {

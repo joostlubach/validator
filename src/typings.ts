@@ -24,19 +24,23 @@ export const Options: {
   },
 }
 
-export interface Type<T> {
+export type Type<T> = RequiredType<T, TypeOptions<T>> | OptionalType<T, TypeOptions<T>>
+
+export interface TypeCommon<T> {
   name:       string
-  options:    TypeOptions<T>
   coerce:     (raw: any, result: ValidatorResult<any>, partial: boolean) => T | typeof INVALID
   serialize:  (value: T, parent?: any) => any
   traverse?:  (value: T, path: string[], callback: TraverseCallback) => void
   validate?:  (raw: any, result: ValidatorResult<any>) => void
 }
 
-export type TypeCreator<T, Opts = TypeOptions<T>> = (
-  & ((options: Opts & {required: false}) => Type<T | null>)
-  & ((options?: Opts) => Type<T>)
-)
+export interface RequiredType<T, Opts extends TypeOptions<T>> extends TypeCommon<T> {
+  options: Opts
+}
+
+export interface OptionalType<T, Opts extends TypeOptions<T>> extends TypeCommon<T | null> {
+  options: Opts
+}
 
 export const INVALID = Symbol('INVALID')
 export type INVALID = typeof INVALID
@@ -50,20 +54,25 @@ export interface TypeOptions<T> {
 
   // A custom tag to identify this type.
   tag?: string
+
+  // Allow additional options for other libraries to add.
+  [key: string]: any
 }
 
 export interface TypeFnWithoutOpts<T, Opts extends TypeOptions<T>> {
-  (options: Opts & {required: false}): Type<T | null>
-  (options?: Opts): Type<T>
+  (options: Opts & {required: false}): OptionalType<T, Opts>
+  (options?: Opts): RequiredType<T, Opts>
 }
 
 export interface TypeFnWithOpts<T, Opts extends TypeOptions<T>> {
-  (options: Opts & {required: false}): Type<T | null>
-  (options: Opts): Type<T>
+  (options: Opts & {required: false}): OptionalType<T, Opts>
+  (options: Opts): RequiredType<T, Opts>
 }
 
 export type TypeFn<T, Opts extends TypeOptions<T>> =
-  {} extends RequiredPartOf<Opts> ? TypeFnWithoutOpts<T, Opts> : TypeFnWithOpts<T, Opts>
+  {} extends RequiredPartOf<Opts>
+    ? TypeFnWithoutOpts<T, Opts>
+    : TypeFnWithOpts<T, Opts>
 
 type RequiredKeysOf<T> = {
   [K in keyof T]-?: {} extends Pick<T, K> ? never : K

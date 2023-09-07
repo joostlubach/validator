@@ -6,7 +6,6 @@ import {
   ObjectSchemaMap,
   PolySchemaInstance,
   SchemaInstance,
-  TraverseCallback,
   Type,
   TypeOptions,
 } from '../typings'
@@ -54,10 +53,7 @@ export default function object(options: ObjectOptions<any> = {}): Type<any> {
     name: 'object',
     options,
 
-    coerce(value: any, result: ValidatorResult<any>, partial: boolean): Record<string, any> | INVALID {
-      if (options.coerce != null) {
-        value = options.coerce(value)
-      }
+    coerce: (value, result, partial) => {
       if (!isObject(value)) { return INVALID }
 
       const schema = getObjectSchema(value)
@@ -114,7 +110,7 @@ export default function object(options: ObjectOptions<any> = {}): Type<any> {
       return coerced
     },
 
-    serialize(value: Record<string, any>): Record<string, any> {
+    serialize: value => {
       const schema = getObjectSchema(value)
       if (schema == null) { return value }
 
@@ -151,7 +147,7 @@ export default function object(options: ObjectOptions<any> = {}): Type<any> {
       return result
     },
 
-    traverse(value: Record<string, any>, path: string[], callback: TraverseCallback) {
+    traverse: (value, path: string[], callback) => {
       if (!isObject(value)) { return }
 
       for (const [propName, propValue] of Object.entries(value)) {
@@ -172,7 +168,7 @@ export default function object(options: ObjectOptions<any> = {}): Type<any> {
       }
     },
 
-    validate(value: any, result: ValidatorResult<any>) {
+    validate: (value, result) => {
       if (!isObject(value)) {
         result.addError('invalid_type', 'Expected an object')
         return

@@ -1,38 +1,46 @@
-import { INVALID, Type, TypeOptions } from '../typings'
-import ValidatorResult from '../ValidatorResult'
+import { Type, TypeOptions } from '../typings'
 
-export interface StringOptions<T extends string> extends TypeOptions<T> {
+export interface StringOptions<T extends string = string> extends TypeOptions<T> {
   minLength?: number
   maxLength?: number
   enum?:      T[]
   match?:     RegExp
+  trim?:      'always' | 'never' | 'auto'
   transform?: (value: string) => T
 }
 
-function string<T extends string>(options: StringOptions<T> & {required: false}): Type<T[] | null>
-function string<T extends string>(options: StringOptions<T>): Type<T[]>
-function string<T extends string>(options: StringOptions<any>): Type<any> {
+function string(options: StringOptions & {required: false}): Type<string | null>
+function string(options?: StringOptions): Type<string>
+
+function string<T extends string>(options: StringOptions<T> & {required: false}): Type<T | null>
+function string<T extends string>(options?: StringOptions<T>): Type<T>
+
+function string(options: StringOptions<any> = {}): Type<any> {
   return {
     name: 'string',
     options,
 
-    coerce(value: any, result: ValidatorResult<any>): T | INVALID {
+    coerce: (value, result) => {
       let text = value == null ? '' : `${value}`
-      if (result.validator.options.trimStrings) {
+
+      const shouldTrim =
+        options.trim === 'always' ? true :
+        options.trim === 'never' ? false :
+        result.validator.options.trimStrings
+      if (shouldTrim) {
         text = text.trim()
       }
+
       if (options.transform != null) {
         return options.transform(text)
       } else {
-        return text as T
+        return text
       }
     },
 
-    serialize(value: string) {
-      return value
-    },
+    serialize: value => value,
 
-    validate(value: T, result: ValidatorResult<any>) {
+    validate: (value, result) => {
       if (typeof value !== 'string') {
         result.addError('invalid_type', 'Expected a string')
         return
