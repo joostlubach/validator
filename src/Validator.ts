@@ -1,7 +1,6 @@
 import { isFunction } from 'lodash'
 import {
   INVALID,
-  OptionalType,
   Options,
   RequiredType,
   Type,
@@ -21,7 +20,7 @@ export default class Validator {
   public options: Required<Options>
 
   public coerce<T>(raw: any, type: RequiredType<T, TypeOptions<T>>, partial: boolean): T | INVALID
-  public coerce<T>(raw: any, type: OptionalType<T, TypeOptions<T>>, partial: boolean): T | INVALID | null
+  public coerce<T>(raw: any, type: Type<T>, partial: boolean): T | INVALID | null
   public coerce<T>(raw: any, type: Type<T>, partial: boolean): T | INVALID | null {
     const result = new ValidatorResult(this)
 
