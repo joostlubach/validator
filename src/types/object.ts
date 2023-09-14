@@ -38,7 +38,7 @@ export default function object<T extends Record<string, any>>(options?: Anonymou
 export default function object<S extends ObjectSchema>(options: MonomorphicOptions<S>): RequiredType<SchemaInstance<S>, MonomorphicOptions<S>>
 export default function object<SM extends ObjectSchemaMap>(options: PolymorphicOptions<SM>): RequiredType<PolySchemaInstance<SM>, PolymorphicOptions<SM>>
 
-export default function object(options: ObjectOptions<any> = {}): Type<any> {
+export default function object(options: ObjectOptions<any> = {}): Type<any, any> {
   const isPolymorphic      = 'polymorphic' in options && !!options.polymorphic
   const monomorphicOptions = options as MonomorphicOptions<any>
   const polymorphicOptions = options as PolymorphicOptions<any>
@@ -70,7 +70,7 @@ export default function object(options: ObjectOptions<any> = {}): Type<any> {
       }
 
       const remaining: Record<string, any> = {...value}
-      let restType: Type<any> | undefined
+      let restType: Type<any, any> | undefined
 
       for (const name of schemaKeys(schema)) {
         if (name === REST_MARKER) {

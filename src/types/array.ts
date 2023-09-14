@@ -2,14 +2,14 @@ import { isArray } from 'lodash'
 import { INVALID, isSetResult, OptionalType, RequiredType, Type, TypeOptions } from '../typings'
 
 export interface ArrayOptions<T> extends TypeOptions<T[]> {
-  itemType:     Type<T>
+  itemType:     Type<T, any>
   minElements?: number
   maxElements?: number
 }
 
 function array<T>(options: ArrayOptions<T> & {required: false}): OptionalType<T[], ArrayOptions<T>>
 function array<T>(options: ArrayOptions<T>): RequiredType<T[], ArrayOptions<T>>
-function array(options: ArrayOptions<any>): Type<any> {
+function array(options: ArrayOptions<any>): Type<any, any> {
   return {
     name: 'array',
     options,

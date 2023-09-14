@@ -2,8 +2,10 @@ import { dictionary } from '../types'
 import { DictionaryOptions } from '../types/dictionary'
 import { Type, TypeFn } from '../typings'
 
-export function dictionaryOf<T>(valueType: Type<T>, defaults?: Omit<DictionaryOptions<T>, 'valueType'>): TypeFn<Record<string, T>, Omit<DictionaryOptions<T>, 'valueType'>>
-export function dictionaryOf(valueType: Type<any>, defaults: Omit<DictionaryOptions<any>, 'valueType'> = {}): TypeFn<any, Omit<DictionaryOptions<any>, 'valueType'>> {
+export type DictionaryOfOptions<T> = Omit<DictionaryOptions<T>, 'valueType'>
+
+export function dictionaryOf<T>(valueType: Type<T, DictionaryOfOptions<T>>, defaults?: DictionaryOfOptions<T>): TypeFn<Record<string, T>, DictionaryOfOptions<T>>
+export function dictionaryOf(valueType: Type<any, DictionaryOfOptions<any>>, defaults: DictionaryOfOptions<any> = {}): TypeFn<any, DictionaryOfOptions<any>> {
   return (options = {}) => dictionary({
     valueType,
     ...defaults,

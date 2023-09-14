@@ -15,7 +15,7 @@ function string(options?: StringOptions): RequiredType<string, StringOptions>
 function string<T extends string>(options: StringOptions<T> & {required: false}): OptionalType<T, StringOptions<T>>
 function string<T extends string>(options?: StringOptions<T>): RequiredType<T, StringOptions<T>>
 
-function string(options: StringOptions<any> = {}): Type<any> {
+function string(options: StringOptions<any> = {}): Type<any, any> {
   return {
     name: 'string',
     options,

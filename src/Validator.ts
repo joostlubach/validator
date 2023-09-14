@@ -20,8 +20,8 @@ export default class Validator {
   public options: Required<Options>
 
   public coerce<T>(raw: any, type: RequiredType<T, TypeOptions<T>>, partial: boolean): T | INVALID
-  public coerce<T>(raw: any, type: Type<T>, partial: boolean): T | INVALID | null
-  public coerce<T>(raw: any, type: Type<T>, partial: boolean): T | INVALID | null {
+  public coerce<T>(raw: any, type: Type<T, any>, partial: boolean): T | INVALID | null
+  public coerce<T>(raw: any, type: Type<T, any>, partial: boolean): T | INVALID | null {
     const result = new ValidatorResult(this)
 
     if (type.options.coerce != null) {
@@ -31,7 +31,7 @@ export default class Validator {
     }
   }
 
-  public async validate<T>(data: T, type: Type<T>, validateExtra?: ValidateExtraFunction<T>): Promise<ValidatorResult<T>> {
+  public async validate<T>(data: T, type: Type<T, any>, validateExtra?: ValidateExtraFunction<T>): Promise<ValidatorResult<T>> {
     const result = new ValidatorResult(this)
     if (type.validate) {
       type.validate(data, result)
@@ -43,7 +43,7 @@ export default class Validator {
     return result
   }
 
-  public validateType<T>(value: T | null, type: Type<T>, result?: ValidatorResult<T>): ValidatorResult<T> {
+  public validateType<T>(value: T | null, type: Type<T, any>, result?: ValidatorResult<T>): ValidatorResult<T> {
     result ??= new ValidatorResult(this)
 
     if (type == null) {

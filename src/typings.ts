@@ -24,7 +24,7 @@ export const Options: {
   },
 }
 
-export type Type<T> = RequiredType<T, TypeOptions<T>> | OptionalType<T, TypeOptions<T>>
+export type Type<T, Opts extends TypeOptions<T>> = RequiredType<T, Opts> | OptionalType<T, Opts>
 
 export interface TypeCommon<T> {
   name:       string
@@ -80,7 +80,7 @@ type RequiredKeysOf<T> = {
 type RequiredPartOf<T> = Pick<T, RequiredKeysOf<T>>
 
 export type ObjectSchema = {
-  [attribute: string]: Type<any>
+  [attribute: string]: Type<any, any>
 }
 
 export interface ObjectSchemaMap {
@@ -88,7 +88,7 @@ export interface ObjectSchemaMap {
 }
 
 /** Extracts the actual type of a dynamic Type definition. */
-export type ValueTypeOf<T extends Type<any>> =
+export type ValueTypeOf<T extends Type<any, any>> =
   T extends RequiredType<infer U, any> ? U :
   T extends OptionalType<infer U, any> ? U | null :
   never
@@ -118,7 +118,7 @@ export interface ValidationError {
   message?: string
 }
 
-export type TraverseCallback = (value: any, path: string, type: Type<any>) => void | false | {set: any}
+export type TraverseCallback = (value: any, path: string, type: Type<any, any>) => void | false | {set: any}
 
 export function isSetResult(result: void | false | {set: any}): result is {set: any} {
   return isPlainObject(result)
