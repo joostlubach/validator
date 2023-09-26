@@ -21,8 +21,11 @@ function string(options: StringOptions<any> = {}): Type<any, any> {
     options,
 
     coerce: (value, result) => {
-      let text = value == null ? '' : `${value}`
+      if (!options.required && value == null) {
+        return null
+      }
 
+      let text = value == null ? '' : `${value}`
       const shouldTrim =
         options.trim === 'always' ? true :
         options.trim === 'never' ? false :
