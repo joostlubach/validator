@@ -10,7 +10,7 @@ export interface TypeConfig<T> {
 
 
 export function defineType<T, Opts extends TypeOptions<T>>(name: string, template: (options: Opts) => TypeConfig<T>): TypeFn<T, Opts> {
-  return ((options: Opts) => ({
+  return ((options: Opts = {} as Opts) => ({
     ...template(options),
     name,
     options,
