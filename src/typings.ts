@@ -1,5 +1,4 @@
 import { isPlainObject, some } from 'lodash'
-import { number, string } from './types'
 import ValidatorResult from './ValidatorResult'
 
 export interface Options {
