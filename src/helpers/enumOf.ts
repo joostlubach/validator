@@ -1,14 +1,13 @@
-import { AnyEnumType, EnumTypeOf, EnumUtil } from 'ytil'
+import { EnumTypeOf, EnumUtil, EnumValue } from 'ytil'
 import { string, StringOptions } from '../types'
 import { TypeFn } from '../typings'
 
-export type EnumOptions<E extends string> = StringOptions<E>
+export type EnumOptions<E extends EnumTypeOf<string>> = Omit<StringOptions<EnumValue<E>>, 'enum'>
 
-export function enumOf<E extends string>(Enum: EnumTypeOf<E>, defaultOptions?: EnumOptions<E>): TypeFn<E, EnumOptions<E>>
-export function enumOf(Enum: AnyEnumType, defaultOptions: EnumOptions<any> = {}): TypeFn<AnyEnumType, EnumOptions<any>> {
-  return (options = {}) => string({
+export function enumOf<E extends EnumTypeOf<string>>(Enum: E, defaultOptions: EnumOptions<any> = {}): TypeFn<EnumValue<E>, EnumOptions<E>> {
+  return (options = {}) => string<EnumValue<E>>({
     enum: EnumUtil.values(Enum),
     ...defaultOptions,
     ...options,
-  })
+  }) as any
 }
