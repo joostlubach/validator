@@ -1,4 +1,5 @@
 import { isPlainObject, some } from 'lodash'
+import { number, string } from './types'
 import ValidatorResult from './ValidatorResult'
 
 export interface Options {
@@ -102,6 +103,13 @@ export type SchemaInstance<S extends ObjectSchema> = {
 export type PolySchemaInstance<SM extends ObjectSchemaMap> = {
   [type in keyof SM]: {type: type} & SchemaInstance<SM[type]>
 }[keyof SM]
+
+/** Retrieves a dynamic schema instance containing a union of all properties from all schemas. */
+type GetKeys<U> = U extends Record<infer K, any> ? K : never
+type UnionToIntersection<U extends object> = {
+   [K in GetKeys<U>]: U extends Record<K, infer T> ? T : never
+}
+export type MergedPolySchemaInstance<SM extends ObjectSchemaMap> = UnionToIntersection<PolySchemaInstance<SM>>
 
 export type ValidateExtraFunction<T> = (result: ValidatorResult<T>) => void | Promise<void>
 export type CustomValidator<T>       = (value: T, result: ValidatorResult<any>) => void | Promise<void>
