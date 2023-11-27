@@ -1,5 +1,6 @@
 import { isPlainObject, some } from 'lodash'
 import ValidatorResult from './ValidatorResult'
+import { EmptyObject } from 'ytil'
 
 export interface Options {
   /// Set to true to ignore unknown attributes
@@ -27,11 +28,11 @@ export const Options: {
 export type Type<T, Opts extends TypeOptions<T>> = RequiredType<T, Opts> | OptionalType<T, Opts>
 
 export interface TypeCommon<T> {
-  name:       string
-  coerce:     (raw: any, result: ValidatorResult<any>, partial: boolean) => T | typeof INVALID
-  serialize:  (value: T, parent?: any) => any
-  traverse?:  (value: T, path: string[], callback: TraverseCallback) => void
-  validate?:  (raw: any, result: ValidatorResult<any>) => void
+  name:      string
+  coerce:    (raw: any, result: ValidatorResult<any>, partial: boolean) => T | typeof INVALID
+  serialize: (value: T, parent?: any) => any
+  traverse?: (value: T, path: string[], callback: TraverseCallback) => void
+  validate?: (raw: any, result: ValidatorResult<any>) => void
 }
 
 export interface RequiredType<T, Opts extends TypeOptions<T>> extends TypeCommon<T> {
@@ -70,12 +71,12 @@ export interface TypeFnWithOpts<T, Opts extends TypeOptions<T>> {
 }
 
 export type TypeFn<T, Opts extends TypeOptions<T>> =
-  {} extends RequiredPartOf<Opts>
+  EmptyObject extends RequiredPartOf<Opts>
     ? TypeFnWithoutOpts<T, Opts>
     : TypeFnWithOpts<T, Opts>
 
 type RequiredKeysOf<T> = {
-  [K in keyof T]-?: {} extends Pick<T, K> ? never : K
+  [K in keyof T]-?: EmptyObject extends Pick<T, K> ? never : K
 }[keyof T]
 type RequiredPartOf<T> = Pick<T, RequiredKeysOf<T>>
 
@@ -105,18 +106,18 @@ export type PolySchemaInstance<SM extends ObjectSchemaMap> = {
 
 /** Retrieves a dynamic schema instance containing a union of all properties from all schemas. */
 type GetKeys<U> = U extends Record<infer K, any> ? K : never
-type UnionToIntersection<U extends object> = {
+type UnionToIntersection<U> = {
    [K in GetKeys<U>]: U extends Record<K, infer T> ? T : never
 }
 export type MergedPolySchemaInstance<SM extends ObjectSchemaMap> = UnionToIntersection<PolySchemaInstance<SM>>
 
 export type ValidateExtraFunction<T> = (result: ValidatorResult<T>) => void | Promise<void>
-export type CustomValidator<T>       = (value: T, result: ValidatorResult<any>) => void | Promise<void>
-export type CustomCoerce<T>          = (value: T) => T
+export type CustomValidator<T> = (value: T, result: ValidatorResult<any>) => void | Promise<void>
+export type CustomCoerce<T> = (value: T) => T
 
 export interface ValidatorResultSerialized {
-  valid:    boolean
-  errors:   ValidationError[]
+  valid:  boolean
+  errors: ValidationError[]
 }
 
 export interface ValidationError {

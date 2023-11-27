@@ -27,9 +27,11 @@ function string(options: StringOptions<any> = {}): Type<any, any> {
 
       let text = value == null ? '' : `${value}`
       const shouldTrim =
-        options.trim === 'always' ? true :
-        options.trim === 'never' ? false :
-        result.validator.options.trimStrings
+        options.trim === 'always'
+          ? true
+          : options.trim === 'never'
+            ? false
+            : result.validator.options.trimStrings
       if (shouldTrim) {
         text = text.trim()
       }

@@ -17,7 +17,7 @@ export default class Validator {
   }
 
   protected errors: ValidationError[] = []
-  public options: Required<Options>
+  public options:   Required<Options>
 
   public coerce<T>(raw: any, type: RequiredType<T, TypeOptions<T>>, partial: boolean): T | INVALID
   public coerce<T>(raw: any, type: Type<T, any>, partial: boolean): T | INVALID | null

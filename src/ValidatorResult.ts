@@ -5,10 +5,10 @@ export default class ValidatorResult<T> {
 
   constructor(
     public readonly validator: Validator,
-    private readonly parts: string[] = []
+    private readonly parts: string[] = [],
   ) {}
 
-  //------
+  // ------
   // Attributes & paths
 
   public get attribute(): string {
@@ -25,7 +25,7 @@ export default class ValidatorResult<T> {
     return new ValidatorResult<T>(this.validator, this.parts.concat([attribute]))
   }
 
-  //------
+  // ------
   // Errors & valid
 
   public get isValid() {
@@ -36,6 +36,7 @@ export default class ValidatorResult<T> {
     // Note: errors is protected, but should be like library-protected.
     return (this.validator as any).errors
   }
+
   private set errors(value: ValidationError[]) {
     // Note: errors is protected, but should be like library-protected.
     (this.validator as any).errors = value
@@ -59,34 +60,34 @@ export default class ValidatorResult<T> {
 
   public addErrors(errors: Omit<ValidationError, 'path'>[]) {
     this.errors.push(
-      ...errors.map(err => ({path: this.path ?? null, ...err}))
+      ...errors.map(err => ({path: this.path ?? null, ...err})),
     )
   }
 
   public clearErrors() {
     this.errors = this.errors.filter(
-      error => error.path !== this.path
+      error => error.path !== this.path,
     )
   }
 
   public mergeResult(other: ValidatorResult<any>) {
     const result = other.parts.reduce<ValidatorResult<any>>(
       (curr, part) => curr.for(part),
-      this
+      this,
     )
 
     result.addErrors(other.getErrors())
   }
 
-  //------
+  // ------
   // Serialization
 
   public serialize(): ValidatorResultSerialized {
     const errors = this.getErrors()
 
     return {
-      valid:  errors.length === 0,
-      errors: errors,
+      valid: errors.length === 0,
+      errors,
     }
   }
 

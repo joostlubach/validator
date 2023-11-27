@@ -7,6 +7,6 @@ export function objectOf(schema: ObjectSchema, defaults: TypeOptions<any> = {}) 
   return (options = {}) => object<any>({
     schema,
     ...defaults,
-    ...options
+    ...options,
   })
 }

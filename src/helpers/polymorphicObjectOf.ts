@@ -8,6 +8,6 @@ export function polymorphicObjectOf(schemas: ObjectSchemaMap, defaults: TypeOpti
     polymorphic: true,
     schemas,
     ...defaults,
-    ...options
+    ...options,
   })
 }

@@ -39,7 +39,7 @@ export default function object<S extends ObjectSchema>(options: MonomorphicOptio
 export default function object<SM extends ObjectSchemaMap>(options: PolymorphicOptions<SM>): RequiredType<PolySchemaInstance<SM>, PolymorphicOptions<SM>>
 
 export default function object(options: ObjectOptions<any> = {}): Type<any, any> {
-  const isPolymorphic      = 'polymorphic' in options && !!options.polymorphic
+  const isPolymorphic = 'polymorphic' in options && !!options.polymorphic
   const monomorphicOptions = options as MonomorphicOptions<any>
   const polymorphicOptions = options as PolymorphicOptions<any>
 
@@ -158,7 +158,7 @@ export default function object(options: ObjectOptions<any> = {}): Type<any, any>
         const propPath = [...path, propName]
 
         const schema = getObjectSchema(value)
-        const type   = schema?.[propName]
+        const type = schema?.[propName]
         if (type == null) { continue }
 
         const retval = callback(propValue, propPath.join('.'), type)
@@ -196,7 +196,7 @@ export default function object(options: ObjectOptions<any> = {}): Type<any, any>
 function validateObjectSchema<S extends ObjectSchema>(
   value:   Record<string, any>,
   schema:  S,
-  result: ValidatorResult<any>
+  result: ValidatorResult<any>,
 ): void {
   checkMissing(value, schema, result)
 
@@ -215,7 +215,7 @@ function validateObjectSchema<S extends ObjectSchema>(
 function checkMissing<S extends ObjectSchema>(
   attributes: Record<string, any>,
   schema:     S,
-  context:    ValidatorResult<any>
+  context:    ValidatorResult<any>,
 ) {
   for (const name of schemaKeys(schema)) {
     if (name === REST_MARKER) { continue }

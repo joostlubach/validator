@@ -9,6 +9,6 @@ export function dictionaryOf(valueType: Type<any, DictionaryOfOptions<any>>, def
   return (options = {}) => dictionary({
     valueType,
     ...defaults,
-    ...options
+    ...options,
   })
 }
