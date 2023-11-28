@@ -1,4 +1,5 @@
 import { isDate } from 'lodash'
+
 import { INVALID, TypeOptions } from '../typings'
 import { defineType } from '../util'
 import ValidatorResult from '../ValidatorResult'

@@ -1,4 +1,5 @@
 import { isArray } from 'lodash'
+
 import { INVALID, isSetResult, OptionalType, RequiredType, Type, TypeOptions } from '../typings'
 
 export interface ArrayOptions<T> extends TypeOptions<T[]> {

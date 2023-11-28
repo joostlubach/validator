@@ -1,4 +1,5 @@
 import { isFunction } from 'lodash'
+
 import {
   INVALID,
   Options,

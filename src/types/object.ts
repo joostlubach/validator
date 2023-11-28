@@ -1,4 +1,5 @@
 import { isFunction, isObject } from 'lodash'
+
 import {
   INVALID,
   isSetResult,

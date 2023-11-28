@@ -1,6 +1,7 @@
 import { isPlainObject, some } from 'lodash'
-import ValidatorResult from './ValidatorResult'
 import { EmptyObject } from 'ytil'
+
+import ValidatorResult from './ValidatorResult'
 
 export interface Options {
   /// Set to true to ignore unknown attributes

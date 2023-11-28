@@ -1,4 +1,5 @@
 import { EnumTypeOf, EnumUtil, EnumValue } from 'ytil'
+
 import { string, StringOptions } from '../types'
 import { TypeFn } from '../typings'
 
