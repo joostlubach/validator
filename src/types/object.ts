@@ -1,5 +1,7 @@
-import { isFunction, isObject } from 'lodash'
+import { isFunction, isObject, mapValues } from 'lodash'
+import { objectEntries, objectKeys } from 'ytil'
 
+import ValidatorResult from '../ValidatorResult'
 import {
   INVALID,
   isSetResult,
@@ -12,7 +14,6 @@ import {
   Type,
   TypeOptions,
 } from '../typings'
-import ValidatorResult from '../ValidatorResult'
 
 export type ObjectOptions<T> = (
   | AnonymousObjectOptions<T>
@@ -22,11 +23,11 @@ export type ObjectOptions<T> = (
 
 export type AnonymousObjectOptions<T> = TypeOptions<T>
 
-export interface MonomorphicOptions<S extends ObjectSchema> extends TypeOptions<SchemaInstance<S>> {
+export interface MonomorphicOptions<S extends ObjectSchema> extends Omit<TypeOptions<SchemaInstance<S>>, 'openAPI'> {
   polymorphic?: false
   schema?:      S
 }
-export interface PolymorphicOptions<SM extends ObjectSchemaMap> extends TypeOptions<PolySchemaInstance<SM>> {
+export interface PolymorphicOptions<SM extends ObjectSchemaMap> extends Omit<TypeOptions<PolySchemaInstance<SM>>, 'openAPI'> {
   polymorphic: true
   schemas:     SM
 }
@@ -190,7 +191,36 @@ export default function object(options: ObjectOptions<any> = {}): Type<any, any>
         validateObjectSchema(value, schema, result)
       }
     },
+    
+    openAPI: recurse => {
+      if (isPolymorphic) {
+        const schemas = polymorphicOptions.schemas as Record<string, ObjectSchema>
+        return {
+          oneOf: objectEntries(schemas).map(([type, schema]) => ({
+            properties: {
+              type: {
+                type: 'string',
+                enum: [type],
+              },
+              ...mapValues(schema, recurse),
+            },
+            required: [
+              'type',
+              ...objectKeys(schema).filter(name => schema[name].options.required !== false),
+            ],
+          })),
+          discriminator: {propertyName: 'type'},
+        }
+      } else {
+        const schema = polymorphicOptions.schema as ObjectSchema
+        return {
+          properties: mapValues(schema, recurse),
+          required:   objectKeys(schema).filter(name => schema[name].options.required !== false),          
+        }
+      }
+    },
 
+    openAPISchemaName: options.openAPISchemaName,
   }
 }
 

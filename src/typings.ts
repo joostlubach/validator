@@ -33,10 +33,18 @@ export interface TypeCommon<T> {
   name:      string
   coerce:    (raw: any, result: ValidatorResult<any>, partial: boolean) => T | typeof INVALID
   serialize: (value: T, parent?: any) => any
-  openAPI?:  (document: OpenAPIV3_1.Document) => OpenAPIV3_1.SchemaObject
   traverse?: (value: T, path: string[], callback: TraverseCallback) => void
   validate?: (raw: any, result: ValidatorResult<any>) => void
+
+  openAPI?:           OpenAPISchemaObject | OpenAPISchemaFn
+  openAPISchemaName?: string
 }
+
+export type OpenAPISchemaObject = OpenAPIV3_1.SchemaObject & {
+  [xKey: `x-${string}`]: any
+}
+
+export type OpenAPISchemaFn = (recurse: (type: Type<any, any> | undefined) => OpenAPISchemaObject | OpenAPIV3_1.ReferenceObject) => OpenAPISchemaObject
 
 export interface RequiredType<T, Opts extends TypeOptions<T>> extends TypeCommon<T> {
   options: Opts
@@ -58,6 +66,10 @@ export interface TypeOptions<T> {
 
   // A custom tag to identify this type.
   tag?: string
+
+  // Custom OpenAPI extensions.
+  openAPI?:           OpenAPISchemaObject | (() => OpenAPISchemaObject)
+  openAPISchemaName?: string
 
   // Allow additional options for other libraries to add.
   [key: string]: any
@@ -83,9 +95,7 @@ type RequiredKeysOf<T> = {
 }[keyof T]
 type RequiredPartOf<T> = Pick<T, RequiredKeysOf<T>>
 
-export type ObjectSchema = {
-  [attribute: string]: Type<any, any>
-}
+export type ObjectSchema = Record<string, Type<any, any>>
 
 export interface ObjectSchemaMap {
   [type: string]: ObjectSchema

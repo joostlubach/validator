@@ -36,12 +36,12 @@ const number = defineType<number, NumberOptions>('number', options => ({
     }
   },
 
-  openAPI: () => ({
+  openAPI: {
     type:    options.integer ? 'integer' : 'number',
     format:  options.integer ? 'int64' : 'double',
     minimum: options.min,
     maximum: options.max,
-  }),
+  },
 }))
 
 export default number

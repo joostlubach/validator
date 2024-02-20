@@ -39,10 +39,10 @@ const date = defineType<Date, DateOptions>('date', (options: DateOptions) => ({
     }
   },
 
-  openAPI: () => ({
+  openAPI: {
     type:   'string',
     format: 'date-time',
-  }),
+  },
 }))
 
 export default date

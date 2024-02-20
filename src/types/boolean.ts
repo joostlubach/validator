@@ -13,7 +13,9 @@ const boolean = defineType<boolean, BooleanOptions>('boolean', () => ({
     }
   },
 
-  openAPI: () => ({type: 'boolean'}),
+  openAPI: {
+    type: 'boolean',
+  },
 }))
 
 export default boolean

@@ -76,7 +76,7 @@ function string(options: StringOptions<any> = {}): Type<any, any> {
       }
     },
 
-    openAPI: () => ({
+    openAPI: {
       type: 'string',
 
       enum:    options.enum,
@@ -84,8 +84,9 @@ function string(options: StringOptions<any> = {}): Type<any, any> {
       
       minLength: options.minLength,
       maxLength: options.maxLength,
-      
-    }),
+
+      ...options.openAPI,      
+    },
   }
 }
 

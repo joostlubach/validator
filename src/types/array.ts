@@ -2,7 +2,7 @@ import { isArray } from 'lodash'
 
 import { INVALID, isSetResult, OptionalType, RequiredType, Type, TypeOptions } from '../typings'
 
-export interface ArrayOptions<T> extends TypeOptions<T[]> {
+export interface ArrayOptions<T> extends Omit<TypeOptions<T[]>, 'openAPI'> {
   itemType:     Type<T, any>
   minElements?: number
   maxElements?: number
@@ -73,6 +73,11 @@ function array(options: ArrayOptions<any>): Type<any, any> {
         }
       }
     },
+
+    openAPI: recurse => ({
+      type:  'array',
+      items: recurse(options.itemType),
+    }),
   }
 }
 
