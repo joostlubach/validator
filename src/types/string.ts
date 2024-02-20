@@ -75,6 +75,17 @@ function string(options: StringOptions<any> = {}): Type<any, any> {
         result.addError('string.invalid', "This value is not correctly formatted")
       }
     },
+
+    openAPI: () => ({
+      type: 'string',
+
+      enum:    options.enum,
+      pattern: options.match?.source,
+      
+      minLength: options.minLength,
+      maxLength: options.maxLength,
+      
+    }),
   }
 }
 

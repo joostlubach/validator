@@ -1,6 +1,6 @@
+import ValidatorResult from '../ValidatorResult'
 import { INVALID, TypeOptions } from '../typings'
 import { defineType } from '../util'
-import ValidatorResult from '../ValidatorResult'
 
 export interface NumberOptions extends TypeOptions<number> {
   integer?: boolean
@@ -35,6 +35,13 @@ const number = defineType<number, NumberOptions>('number', options => ({
       result.addError('number.too_high', `This value should be at most ${options.max}`)
     }
   },
+
+  openAPI: () => ({
+    type:    options.integer ? 'integer' : 'number',
+    format:  options.integer ? 'int64' : 'double',
+    minimum: options.min,
+    maximum: options.max,
+  }),
 }))
 
 export default number

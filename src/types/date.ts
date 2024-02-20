@@ -9,6 +9,9 @@ export interface DateOptions extends TypeOptions<Date> {
   before?: Date
 }
 
+/**
+ * A simple type wrapping a JS Date object.
+ */
 const date = defineType<Date, DateOptions>('date', (options: DateOptions) => ({
   coerce: raw => {
     if (isDate(raw)) { return raw }
@@ -20,7 +23,7 @@ const date = defineType<Date, DateOptions>('date', (options: DateOptions) => ({
     }
   },
 
-  serialize: value => value,
+  serialize: value => value.toISOString(),
 
   validate(value: any, result: ValidatorResult<any>) {
     if (!(value instanceof Date) || isNaN(value.getTime())) {
@@ -35,6 +38,11 @@ const date = defineType<Date, DateOptions>('date', (options: DateOptions) => ({
       result.addError('date.too_late', `This value should be before ${options.before}`)
     }
   },
+
+  openAPI: () => ({
+    type:   'string',
+    format: 'date-time',
+  }),
 }))
 
 export default date

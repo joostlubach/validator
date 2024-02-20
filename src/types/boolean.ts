@@ -12,6 +12,8 @@ const boolean = defineType<boolean, BooleanOptions>('boolean', () => ({
       result.addError('invalid_type', 'Expected a boolean')
     }
   },
+
+  openAPI: () => ({type: 'boolean'}),
 }))
 
 export default boolean

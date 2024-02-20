@@ -1,4 +1,5 @@
 import { isPlainObject, some } from 'lodash'
+import { OpenAPIV3_1 } from 'openapi-types'
 import { EmptyObject } from 'ytil'
 
 import ValidatorResult from './ValidatorResult'
@@ -32,6 +33,7 @@ export interface TypeCommon<T> {
   name:      string
   coerce:    (raw: any, result: ValidatorResult<any>, partial: boolean) => T | typeof INVALID
   serialize: (value: T, parent?: any) => any
+  openAPI?:  (document: OpenAPIV3_1.Document) => OpenAPIV3_1.SchemaObject
   traverse?: (value: T, path: string[], callback: TraverseCallback) => void
   validate?: (raw: any, result: ValidatorResult<any>) => void
 }
@@ -92,8 +94,8 @@ export interface ObjectSchemaMap {
 /** Extracts the actual type of a dynamic Type definition. */
 export type ValueTypeOf<T extends Type<any, any>> =
   T extends RequiredType<infer U, any> ? U :
-  T extends OptionalType<infer U, any> ? U | null :
-  never
+    T extends OptionalType<infer U, any> ? U | null :
+      never
 
 /** Retrieves a full object type given an object schema. */
 export type SchemaInstance<S extends ObjectSchema> = {
@@ -108,7 +110,7 @@ export type PolySchemaInstance<SM extends ObjectSchemaMap> = {
 /** Retrieves a dynamic schema instance containing a union of all properties from all schemas. */
 type GetKeys<U> = U extends Record<infer K, any> ? K : never
 type UnionToIntersection<U> = {
-   [K in GetKeys<U>]: U extends Record<K, infer T> ? T : never
+  [K in GetKeys<U>]: U extends Record<K, infer T> ? T : never
 }
 export type MergedPolySchemaInstance<SM extends ObjectSchemaMap> = UnionToIntersection<PolySchemaInstance<SM>>
 
