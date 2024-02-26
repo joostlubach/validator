@@ -38,6 +38,7 @@
     }
   },
   "dependencies": {
+    "doctext": "workspace:^",
     "lodash": "^4.17.21",
     "ytil": "workspace:^"
   },

@@ -1,6 +1,7 @@
+import { DoctextReader } from 'doctext'
 import { OpenAPIV3_1 } from 'openapi-types'
 
-import { OpenAPISchemaObject, Type } from './typings'
+import { ObjectSchema, OpenAPISchemaObject, Type } from './typings'
 
 export function deriveObjectAPISchema(type: Type<any, any>, options: ObjectAPIOptions = {}) {
   const {injectSchemasInto} = options
@@ -10,16 +11,14 @@ export function deriveObjectAPISchema(type: Type<any, any>, options: ObjectAPIOp
 
     const schema = type.openAPI instanceof Function ? type.openAPI(recurse) : type.openAPI
     if (injectSchemasInto != null && type?.openAPISchemaName != null) {
-      const name = options.schemaPrefix != null
+      const path = options.schemaPrefix != null
         ? `${options.schemaPrefix}${type.openAPISchemaName}`
         : type.openAPISchemaName
       
-      injectSchemasInto.components ??= {}
-      injectSchemasInto.components.schemas ??= {}
-      injectSchemasInto.components.schemas[name] = schema
+      appendSchema(injectSchemasInto, path, schema)
 
       return {
-        $ref: `#/components/schemas/${name}`,
+        $ref: `#/components/schemas/${path}`,
       }
     } else {
       return schema
@@ -27,6 +26,29 @@ export function deriveObjectAPISchema(type: Type<any, any>, options: ObjectAPIOp
   }
 
   return recurse(type)
+}
+
+export function doctext<S extends ObjectSchema>(schema: S): S {
+  const reader = DoctextReader.create(doctext)
+  const result = reader.readSync(schema)
+  Object.assign(schema, '__doctext', result)
+  return schema
+}
+
+function appendSchema(document: OpenAPIV3_1.Document, path: string, schema: OpenAPIV3_1.SchemaObject) {
+  const head = path.split('/').filter(Boolean)
+  const tail = head.pop()
+  if (tail == null) { return }
+
+  document.components ??= {}
+
+  let current = document.components.schemas ??= {}
+  for (const part of head) {
+    current[part] ??= {}
+    current = current[part] as any
+  }
+
+  current[tail] = schema
 }
 
 export interface ObjectAPIOptions {
