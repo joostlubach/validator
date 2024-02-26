@@ -144,3 +144,6 @@ export type TraverseCallback = (value: any, path: string, type: Type<any, any>) 
 export function isSetResult(result: void | false | {set: any}): result is {set: any} {
   return isPlainObject(result)
 }
+
+export const REST_MARKER = '...'
+export const DOCTEXT_MARKER = '__doctext__'

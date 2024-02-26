@@ -3,6 +3,7 @@ import { objectEntries, objectKeys } from 'ytil'
 
 import ValidatorResult from '../ValidatorResult'
 import {
+  DOCTEXT_MARKER,
   INVALID,
   isSetResult,
   ObjectSchema,
@@ -10,6 +11,7 @@ import {
   OptionalType,
   PolySchemaInstance,
   RequiredType,
+  REST_MARKER,
   SchemaInstance,
   Type,
   TypeOptions,
@@ -129,6 +131,7 @@ export default function object(options: ObjectOptions<any> = {}): Type<any, any>
 
       for (const [name, type] of Object.entries(schema)) {
         if (name === REST_MARKER) { continue }
+        if (name === DOCTEXT_MARKER) { continue }
 
         if (value[name] !== undefined) {
           result[name] = value[name] == null
@@ -262,5 +265,3 @@ function checkMissing<S extends ObjectSchema>(
 function schemaKeys(schema: ObjectSchema) {
   return Object.keys(schema)
 }
-
-export const REST_MARKER = '...'
