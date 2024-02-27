@@ -1,7 +1,8 @@
-import { isFunction, isObject, mapValues } from 'lodash'
+import { isFunction, isObject, mapValues, omit } from 'lodash'
 import { objectEntries, objectKeys } from 'ytil'
 
 import ValidatorResult from '../ValidatorResult'
+import { getDocumentationFromDoctext } from '../doctext'
 import {
   DOCTEXT_MARKER,
   INVALID,
@@ -16,6 +17,7 @@ import {
   Type,
   TypeOptions,
 } from '../typings'
+import { schemaKeys } from '../util'
 
 export type ObjectOptions<T> = (
   | AnonymousObjectOptions<T>
@@ -73,10 +75,10 @@ export default function object(options: ObjectOptions<any> = {}): Type<any, any>
         coerced.type = (value as any).type
       }
 
-      const remaining: Record<string, any> = {...value}
+      const remaining: Record<string, any> = omit(value, DOCTEXT_MARKER)
       let restType: Type<any, any> | undefined
 
-      for (const name of schemaKeys(schema)) {
+      for (const name of objectKeys(schema)) {
         if (name === REST_MARKER) {
           restType = schema[name]
           continue
@@ -143,6 +145,8 @@ export default function object(options: ObjectOptions<any> = {}): Type<any, any>
 
       if (schema[REST_MARKER] != null && names.size > 0) {
         for (const name of names) {
+          if (name === DOCTEXT_MARKER) { continue }
+
           if (value[name] === undefined) {
             continue
           } else if (value[name] === null) {
@@ -200,16 +204,19 @@ export default function object(options: ObjectOptions<any> = {}): Type<any, any>
         const schemas = polymorphicOptions.schemas as Record<string, ObjectSchema>
         return {
           oneOf: objectEntries(schemas).map(([type, schema]) => ({
+            ...getDocumentationFromDoctext(schema),
+
             properties: {
               type: {
+                ...getDocumentationFromDoctext(schema),
                 type: 'string',
                 enum: [type],
               },
-              ...mapValues(schema, recurse),
+              ...mapValues(omit(schema, DOCTEXT_MARKER), recurse),
             },
             required: [
               'type',
-              ...objectKeys(schema).filter(name => schema[name].options.required !== false),
+              ...schemaKeys(schema).filter(name => schema[name].options.required !== false),
             ],
           })),
           discriminator: {propertyName: 'type'},
@@ -217,8 +224,9 @@ export default function object(options: ObjectOptions<any> = {}): Type<any, any>
       } else {
         const schema = polymorphicOptions.schema as ObjectSchema
         return {
-          properties: mapValues(schema, recurse),
-          required:   objectKeys(schema).filter(name => schema[name].options.required !== false),          
+          ...getDocumentationFromDoctext(schema),
+          properties: mapValues(omit(schema, DOCTEXT_MARKER), recurse),
+          required:   schemaKeys(schema).filter(name => schema[name].options.required !== false),          
         }
       }
     },
@@ -260,8 +268,4 @@ function checkMissing<S extends ObjectSchema>(
 
     context.for(name).addError('required', `This value is required`)
   }
-}
-
-function schemaKeys(schema: ObjectSchema) {
-  return Object.keys(schema)
 }

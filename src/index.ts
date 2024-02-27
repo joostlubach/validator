@@ -2,9 +2,10 @@ import * as types from './types'
 
 export { default as ValidatorResult } from './ValidatorResult'
 export { default } from './Validator'
-export { deriveObjectAPISchema, doctext, getDoctext } from './openAPI'
+export { deriveObjectAPISchema, openAPIDoc } from './openAPI'
+export { doctext, getDocumentationFromDoctext } from './doctext'
 export * from './typings'
 export * from './helpers'
-export { defineType, mergeSchema } from './util'
+export { defineType, mergeSchema, schemaKeys } from './util'
 
 export { types }

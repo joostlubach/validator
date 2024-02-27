@@ -1,4 +1,4 @@
 // @index: export * from ${relpath}
 export * from './defineType'
-export * from './mergeSchema'
+export * from './schemas'
 // /index
