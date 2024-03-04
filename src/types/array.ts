@@ -26,7 +26,7 @@ function array(options: ArrayOptions<any>): Type<any, any> {
     },
 
     serialize: value => {
-      if (!isArray(value)) { return INVALID }
+      if (!isArray(value)) { return [] }
 
       return value.map(element => {
         if (element == null) {

@@ -23,7 +23,13 @@ const date = defineType<Date, DateOptions>('date', (options: DateOptions) => ({
     }
   },
 
-  serialize: value => value.toISOString(),
+  serialize: value => {
+    if (value instanceof Date) {
+      return value.toISOString()
+    } else {
+      return 'invalid'
+    }
+  },
 
   validate(value: any, result: ValidatorResult<any>) {
     if (!(value instanceof Date) || isNaN(value.getTime())) {

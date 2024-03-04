@@ -43,7 +43,7 @@ function string(options: StringOptions<any> = {}): Type<any, any> {
       }
     },
 
-    serialize: value => value,
+    serialize: value => `${value}`,
 
     validate: (value, result) => {
       if (typeof value !== 'string') {

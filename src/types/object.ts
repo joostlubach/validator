@@ -1,4 +1,4 @@
-import { isFunction, isObject, mapValues, omit } from 'lodash'
+import { isFunction, isObject, isPlainObject, mapValues, omit } from 'lodash'
 import { objectEntries, objectKeys } from 'ytil'
 
 import ValidatorResult from '../ValidatorResult'
@@ -53,6 +53,7 @@ export default function object(options: ObjectOptions<any> = {}): Type<any, any>
     if (value == null) { return null }
 
     if (isPolymorphic) {
+      if (value.type == null) { return null }
       return polymorphicOptions.schemas[value.type] ?? null
     } else {
       return monomorphicOptions.schema ?? null
@@ -64,48 +65,50 @@ export default function object(options: ObjectOptions<any> = {}): Type<any, any>
     options,
 
     coerce: (value, result, partial) => {
-      if (!isObject(value)) { return INVALID }
+      if (!isPlainObject(value)) { return INVALID }
 
       const schema = getObjectSchema(value)
-      if (schema == null) { return value as SchemaInstance<any> }
+      if (schema == null) { return {} }
 
-      const coerced: any = {}
-
+      const coerced: Record<string, any> = {}
       if (isPolymorphic) {
         coerced.type = (value as any).type
       }
 
-      const remaining: Record<string, any> = omit(value, DOCTEXT_MARKER)
+      const remaining: Record<string, any> = {...value}
+
       let restType: Type<any, any> | undefined
 
       for (const name of objectKeys(schema)) {
+        if (name === DOCTEXT_MARKER) { continue }
         if (name === REST_MARKER) {
           restType = schema[name]
           continue
         }
 
-        const type = schema[name]
+        const type: Type<any, any> = schema[name]
+        let val: any = value[name]
 
         // If the value is `undefined`, skip this one altogether if requested.
-        if (partial && remaining[name] === undefined) {
-          continue
-        }
+        if (partial && val === undefined) { continue }
 
-        delete remaining[name]
-
-        const withDefaults: Record<string, any> = {...value}
-
-        // Check for a default.
-        if (withDefaults[name] == null && type.options.default != null) {
-          withDefaults[name] = isFunction(type.options.default)
+        // If the value is missing, check for a default.
+        if (val == null && type.options.default != null) {
+          val = isFunction(type.options.default)
             ? type.options.default.call(null)
             : type.options.default
         }
 
-        // Ask the type to coerce the value.
-        coerced[name] = withDefaults[name] != null
-          ? type.coerce(withDefaults[name], result, partial)
-          : null
+        if (val != null) {
+          coerced[name] = type.coerce(val, result, partial)
+        } else if (type.options.required === false) {
+          coerced[name] = null
+        } else {
+          result.for(name).addError('required', `This value is required`)
+        }
+
+        // Remove from the remaining list.
+        delete remaining[name]
       }
 
       // Assign any rest values.
@@ -121,6 +124,10 @@ export default function object(options: ObjectOptions<any> = {}): Type<any, any>
     },
 
     serialize: value => {
+      if (!isPlainObject(value)) {
+        return {}
+      }
+
       const schema = getObjectSchema(value)
       if (schema == null) { return value }
 

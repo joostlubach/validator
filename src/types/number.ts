@@ -17,7 +17,13 @@ const number = defineType<number, NumberOptions>('number', options => ({
     return num
   },
 
-  serialize: value => value,
+  serialize: value => {
+    if (typeof value === 'number') {
+      return value
+    } else {
+      return NaN
+    }
+  },
 
   validate(value: any, result: ValidatorResult<any>) {
     if (typeof value !== 'number' || !Number.isFinite(value)) {
