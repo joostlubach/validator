@@ -1,5 +1,5 @@
-import { ValidationError, ValidatorResultSerialized } from './typings'
 import Validator from './Validator'
+import { ValidationError, ValidatorResultSerialized } from './typings'
 
 export default class ValidatorResult<T> {
 
@@ -8,8 +8,7 @@ export default class ValidatorResult<T> {
     private readonly parts: string[] = [],
   ) {}
 
-  // ------
-  // Attributes & paths
+  // #region Attributes & paths
 
   public get attribute(): string {
     if (this.parts.length === 0) { return '<root>' }
@@ -25,8 +24,9 @@ export default class ValidatorResult<T> {
     return new ValidatorResult<T>(this.validator, this.parts.concat([attribute]))
   }
 
-  // ------
-  // Errors & valid
+  // #endregion
+
+  // #region Errors & valid
 
   public get isValid() {
     return this.getErrors().length === 0
@@ -70,6 +70,33 @@ export default class ValidatorResult<T> {
     )
   }
 
+  public prefix(prefix: string) {
+    // Prefixes all errors with the given prefix, and updates the prefix for this result.
+    for (const error of this.getErrors()) {
+      error.path = `${prefix}.${error.path}`
+    }
+
+    this.parts.unshift(prefix)
+    return this    
+  }
+
+  // #endregion
+
+  // #region Merging
+
+  public static merge(results: ValidatorResult<any>[]) {
+    if (results.length === 0) {
+      return new ValidatorResult<any>(new Validator())
+    }
+
+    const merged = new ValidatorResult<any>(results[0].validator)
+    for (const result of results) {
+      merged.mergeResult(result)
+    }
+
+    return merged
+  }
+
   public mergeResult(other: ValidatorResult<any>) {
     const result = other.parts.reduce<ValidatorResult<any>>(
       (curr, part) => curr.for(part),
@@ -79,8 +106,9 @@ export default class ValidatorResult<T> {
     result.addErrors(other.getErrors())
   }
 
-  // ------
-  // Serialization
+  // #endregion
+
+  // #region Serialization
 
   public serialize(): ValidatorResultSerialized {
     const errors = this.getErrors()
@@ -90,5 +118,7 @@ export default class ValidatorResult<T> {
       errors,
     }
   }
+
+  // #endregion
 
 }
