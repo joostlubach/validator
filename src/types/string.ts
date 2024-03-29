@@ -1,4 +1,4 @@
-import { OptionalType, RequiredType, Type, TypeOptions } from '../typings.js'
+import { OptionalType, RequiredType, Type, TypeOptions } from '../typings'
 
 export interface StringOptions<T extends string = string> extends TypeOptions<T> {
   minLength?: number

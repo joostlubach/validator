@@ -1,7 +1,7 @@
 import { OpenAPIV3_1 } from 'openapi-types'
 
-import { getDocumentationFromDoctext } from './doctext.js'
-import { OpenAPISchemaObject, Type } from './typings.js'
+import { getDocumentationFromDoctext } from './doctext'
+import { OpenAPISchemaObject, Type } from './typings'
 
 export function deriveObjectAPISchema(type: Type<any, any>, options: ObjectAPIOptions = {}) {
   const {injectSchemasInto} = options

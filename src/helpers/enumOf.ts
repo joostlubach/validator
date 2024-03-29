@@ -1,7 +1,7 @@
 import { EnumTypeOf, EnumUtil, EnumValue } from 'ytil'
 
-import { string, StringOptions } from '../types/index.js'
-import { TypeFn } from '../typings.js'
+import { string, StringOptions } from '../types'
+import { TypeFn } from '../typings'
 
 export type EnumOptions<E extends EnumTypeOf<string>> = Omit<StringOptions<EnumValue<E>>, 'enum'>
 
