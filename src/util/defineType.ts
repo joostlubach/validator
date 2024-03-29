@@ -1,4 +1,4 @@
-import ValidatorResult from '../ValidatorResult'
+import ValidatorResult from '../ValidatorResult.js'
 import {
   INVALID,
   OpenAPISchemaFn,
@@ -6,7 +6,7 @@ import {
   TraverseCallback,
   TypeFn,
   TypeOptions,
-} from '../typings'
+} from '../typings.js'
 
 export interface TypeConfig<T> {
   coerce:    (raw: any, result: ValidatorResult<any>, partial: boolean) => T | typeof INVALID

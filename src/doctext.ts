@@ -2,7 +2,7 @@ import { Doctext, DoctextReader, Entities as doctext_Entities } from 'doctext'
 import { set } from 'lodash'
 import { OpenAPIV3_1 } from 'openapi-types'
 
-import { DOCTEXT_MARKER, ObjectSchema, Type } from './typings'
+import { DOCTEXT_MARKER, ObjectSchema, Type } from './typings.js'
 
 const reader = DoctextReader.createWithEntities<DoctextEntities>(doctext, {
   examples: {

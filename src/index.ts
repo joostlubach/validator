@@ -1,11 +1,9 @@
-import * as types from './types'
+export { default as Validator } from './Validator.js'
+export { default as ValidatorResult } from './ValidatorResult.js'
+export { doctext, getDocumentationFromDoctext } from './doctext.js'
+export { deriveObjectAPISchema } from './openAPI.js'
+export { defineType, mergeSchema, schemaKeys } from './util/index.js'
 
-export { default as ValidatorResult } from './ValidatorResult'
-export { default } from './Validator'
-export { deriveObjectAPISchema } from './openAPI'
-export { doctext, getDocumentationFromDoctext } from './doctext'
-export * from './typings'
-export * from './helpers'
-export { defineType, mergeSchema, schemaKeys } from './util'
-
-export { types }
+export * from './helpers/index.js'
+export * from './typings.js'
+export * as types from './types/index.js'

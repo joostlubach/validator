@@ -1,7 +1,7 @@
 // @index: export * from ${relpath}
-export * from './arrayOf'
-export * from './dictionaryOf'
-export * from './enumOf'
-export * from './objectOf'
-export * from './polymorphicObjectOf'
+export * from './arrayOf.js'
+export * from './dictionaryOf.js'
+export * from './enumOf.js'
+export * from './objectOf.js'
+export * from './polymorphicObjectOf.js'
 // /index

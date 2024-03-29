@@ -1,5 +1,5 @@
-import { TypeOptions } from '../typings'
-import { defineType } from '../util/defineType'
+import { TypeOptions } from '../typings.js'
+import { defineType } from '../util/index.js'
 
 export type AnyOptions = TypeOptions<any>
 
