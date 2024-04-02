@@ -1,6 +1,6 @@
 import { isFunction } from 'lodash'
 
-import ValidatorResult from './ValidatorResult.js'
+import ValidatorResult from './ValidatorResult'
 import {
   INVALID,
   Options,
@@ -9,7 +9,7 @@ import {
   TypeOptions,
   ValidateExtraFunction,
   ValidationError,
-} from './typings.js'
+} from './typings'
 
 export default class Validator {
 

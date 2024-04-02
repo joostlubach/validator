@@ -1,4 +1,4 @@
 // @index: export * from ${relpath}
-export * from './defineType.js'
-export * from './schemas.js'
+export * from './defineType'
+export * from './schemas'
 // /index

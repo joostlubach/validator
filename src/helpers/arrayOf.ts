@@ -1,5 +1,5 @@
-import { array, ArrayOptions } from '../types/index.js'
-import { Type, TypeFn } from '../typings.js'
+import { array, ArrayOptions } from '../types'
+import { Type, TypeFn } from '../typings'
 
 export type ArrayOfOptions<T> = Omit<ArrayOptions<T>, 'itemType'>
 

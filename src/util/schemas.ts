@@ -1,6 +1,6 @@
 import { objectKeys } from 'ytil'
 
-import { DOCTEXT_MARKER, ObjectSchema, REST_MARKER } from '../typings.js'
+import { DOCTEXT_MARKER, ObjectSchema, REST_MARKER } from '../typings'
 
 export function mergeSchema(target: ObjectSchema, schema: ObjectSchema) {
   const {[DOCTEXT_MARKER]: doctext, ...rest} = schema

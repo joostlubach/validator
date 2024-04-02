@@ -1,5 +1,5 @@
-import { dictionary, DictionaryOptions } from '../types/index.js'
-import { Type, TypeFn } from '../typings.js'
+import { dictionary, DictionaryOptions } from '../types'
+import { Type, TypeFn } from '../typings'
 
 export type DictionaryOfOptions<T> = Omit<DictionaryOptions<T>, 'valueType'>
 
