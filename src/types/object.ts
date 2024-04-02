@@ -1,8 +1,8 @@
 import { isFunction, isObject, isPlainObject, mapValues, omit } from 'lodash'
 import { objectEntries, objectKeys } from 'ytil'
 
-import ValidatorResult from '../ValidatorResult'
-import { getDocumentationFromDoctext } from '../doctext'
+import ValidatorResult from '../ValidatorResult.js'
+import { getDocumentationFromDoctext } from '../doctext.js'
 import {
   DOCTEXT_MARKER,
   INVALID,
@@ -16,8 +16,8 @@ import {
   SchemaInstance,
   Type,
   TypeOptions,
-} from '../typings'
-import { schemaKeys } from '../util'
+} from '../typings.js'
+import { schemaKeys } from '../util/index.js'
 
 export type ObjectOptions<T> = (
   | AnonymousObjectOptions<T>

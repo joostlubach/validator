@@ -1,6 +1,6 @@
 import { isArray } from 'lodash'
 
-import { INVALID, isSetResult, OptionalType, RequiredType, Type, TypeOptions } from '../typings'
+import { INVALID, isSetResult, OptionalType, RequiredType, Type, TypeOptions } from '../typings.js'
 
 export interface ArrayOptions<T> extends Omit<TypeOptions<T[]>, 'openAPI'> {
   itemType:     Type<T, any>

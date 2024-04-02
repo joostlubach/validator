@@ -1,6 +1,6 @@
-import { any } from '../types'
-import { OptionalType, RequiredType, REST_MARKER, Type, TypeOptions } from '../typings'
-import object from './object'
+import { any } from '../types/index.js'
+import { OptionalType, RequiredType, REST_MARKER, Type, TypeOptions } from '../typings.js'
+import object from './object.js'
 
 export interface DictionaryOptions<T> extends TypeOptions<Record<string, T>> {
   valueType?: Type<T, any>

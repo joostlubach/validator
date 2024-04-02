@@ -1,5 +1,5 @@
-import { TypeOptions } from '../typings'
-import { defineType } from '../util'
+import { TypeOptions } from '../typings.js'
+import { defineType } from '../util/index.js'
 
 export type BooleanOptions = TypeOptions<boolean>
 

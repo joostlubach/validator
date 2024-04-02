@@ -1,5 +1,5 @@
-import Validator from './Validator'
-import { ValidationError, ValidatorResultSerialized } from './typings'
+import Validator from './Validator.js'
+import { ValidationError, ValidatorResultSerialized } from './typings.js'
 
 export default class ValidatorResult<T> {
 

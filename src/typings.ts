@@ -2,7 +2,7 @@ import { isPlainObject, some } from 'lodash'
 import { OpenAPIV3_1 } from 'openapi-types'
 import { EmptyObject } from 'ytil'
 
-import ValidatorResult from './ValidatorResult'
+import ValidatorResult from './ValidatorResult.js'
 
 export interface Options {
   /// Set to true to ignore unknown attributes
