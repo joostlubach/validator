@@ -104,6 +104,7 @@ export default function object(options: ObjectOptions<any> = {}): Type<any, any>
         } else if (type.options.required === false) {
           coerced[name] = null
         } else {
+          coerced[name] = null // We don't use undefined, always set to `null`, but add an errror.
           result.for(name).addError('required', `This value is required`)
         }
 
