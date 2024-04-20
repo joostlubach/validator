@@ -12,3 +12,7 @@ export function mergeSchema(target: ObjectSchema, schema: ObjectSchema) {
 export function schemaKeys(schema: ObjectSchema) {
   return objectKeys(schema).filter(it => it !== REST_MARKER && it !== DOCTEXT_MARKER)
 }
+
+export function schemaEntries(schema: ObjectSchema) {
+  return schemaKeys(schema).map(key => [key, schema[key]] as const)
+}
