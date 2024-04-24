@@ -9,11 +9,11 @@ export interface StringOptions<T extends string = string> extends TypeOptions<T>
   transform?: (value: string) => T
 }
 
-function string(options: StringOptions & {required: false}): OptionalType<string, StringOptions>
-function string(options?: StringOptions): RequiredType<string, StringOptions>
+function string<T extends string, Opts extends StringOptions<T> & {required: false}>(options: StringOptions<T> & Opts): OptionalType<T, Opts>
+function string<T extends string, Opts extends StringOptions<T>>(options?: StringOptions<T> & Opts): RequiredType<T, Opts>
 
-function string<T extends string>(options: StringOptions<T> & {required: false}): OptionalType<T, StringOptions<T>>
-function string<T extends string>(options?: StringOptions<T>): RequiredType<T, StringOptions<T>>
+function string<Opts extends StringOptions & {required: false}>(options: Opts): OptionalType<string, Opts>
+function string<Opts extends StringOptions>(options?: Opts): RequiredType<string, Opts>
 
 function string(options: StringOptions<any> = {}): Type<any, any> {
   return {

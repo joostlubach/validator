@@ -5,7 +5,7 @@ export default class ValidatorResult<T> {
 
   constructor(
     public readonly validator: Validator,
-    private readonly parts: string[] = [],
+    public readonly parts: string[] = [],
   ) {}
 
   // #region Attributes & paths

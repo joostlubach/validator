@@ -1,4 +1,3 @@
-import { isFunction } from 'lodash'
 
 import ValidatorResult from './ValidatorResult'
 import {
@@ -58,15 +57,23 @@ export default class Validator {
       result.addError('required', `This value is required`)
     }
 
-    if (value != null && type.validate != null) {
-      type.validate(value, result)
+    let validate = () => {
+      if (value != null && type.validate != null) {
+        type.validate(value, result)
+      }
     }
 
-    // Run any custom validator.
-    if (type.options != null && value != null && isFunction(type.options.validate)) {
-      type.options.validate(value, result)
-    }
+    // Wrap in the custom callback if specified.
 
+    const {callback} = this.options
+    if (callback != null) {
+      const upstream = validate
+      validate = () => {
+        callback(value, type, result, upstream)
+      }
+    }
+    
+    validate()
     return result
   }
 

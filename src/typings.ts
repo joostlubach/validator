@@ -10,7 +10,11 @@ export interface Options {
 
   /// When true, trims all string properties
   trimStrings?: boolean
+
+  callback?: ValidateCallback | null
 }
+
+export type ValidateCallback = (value: any, type: Type<any, any>, result: ValidatorResult<any>, upstream: () => void) => void
 
 export const Options: {
   defaults:  Required<Options>
@@ -19,6 +23,7 @@ export const Options: {
   defaults: {
     ignoreUnknown: true,
     trimStrings:   true,
+    callback:      null,
   },
   isOptions: (opts): opts is Options => {
     if (!isPlainObject(opts)) { return false }

@@ -8,8 +8,8 @@ export interface ArrayOptions<T> extends Omit<TypeOptions<T[]>, 'openAPI'> {
   maxElements?: number
 }
 
-function array<T>(options: ArrayOptions<T> & {required: false}): OptionalType<T[], ArrayOptions<T>>
-function array<T>(options: ArrayOptions<T>): RequiredType<T[], ArrayOptions<T>>
+function array<T, Opts extends ArrayOptions<T> & {required: false}>(options: ArrayOptions<T> & Opts): OptionalType<T[], Opts>
+function array<T, Opts extends ArrayOptions<T>>(options: ArrayOptions<T> & Opts): RequiredType<T[], Opts>
 function array(options: ArrayOptions<any>): Type<any, any> {
   return {
     name: 'array',
