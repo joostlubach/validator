@@ -21,7 +21,7 @@ const reader = DoctextReader.createWithEntities<DoctextEntities>(doctext, {
         value,
         externalValue,
       })
-    }
+    },
   },
 })
 
