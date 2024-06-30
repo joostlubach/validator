@@ -4,20 +4,10 @@
   "description": "General purpose JSON object validator",
   "author": "Joost Lubach",
   "license": "MIT",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
+  "main": "./src/index.ts",
   "exports": {
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "default": "./dist/cjs/index.js"
-    },
-    "./types": {
-      "types": "./dist/types/types/index.d.ts",
-      "import": "./dist/esm/types/index.js",
-      "default": "./dist/cjs/types/index.js"
-    }
+    ".": "./src/index.ts",
+    "./types": "./src/types/index.ts"
   },
   "scripts": {
     "build": "pnpm clean && pnpm build:tsc",
@@ -30,9 +20,9 @@
     "test": "NODE_ENV=test jest"
   },
   "dependencies": {
-    "doctext": "workspace:^",
+    "doctext": "workspace:*",
     "lodash": "^4.17.21",
-    "ytil": "workspace:^"
+    "ytil": "workspace:*"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.0",
