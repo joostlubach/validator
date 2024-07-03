@@ -1,5 +1,5 @@
-import { isFunction, isObject, isPlainObject, mapValues, omit } from 'lodash'
-import { objectEntries, objectKeys } from 'ytil'
+import { isObject, isPlainObject, mapValues, omit } from 'lodash'
+import { isFunction, objectEntries, objectKeys } from 'ytil'
 
 import ValidatorResult from '../ValidatorResult'
 import { getDocumentationFromDoctext } from '../doctext'

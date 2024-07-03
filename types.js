@@ -1,1 +1,1 @@
-export * from './dist/cjs/types'
+export * from './src/types'
