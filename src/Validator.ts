@@ -43,7 +43,7 @@ export default class Validator {
     return result
   }
 
-  public validateType<T>(value: T | null, type: Type<T, any>, result?: ValidatorResult<T>): ValidatorResult<T> {
+  public validateType<T>(value: T | null, type: Type<T, TypeOptions<any>>, result?: ValidatorResult<T>): ValidatorResult<T> {
     result ??= new ValidatorResult(this)
 
     if (type == null) {
@@ -58,9 +58,9 @@ export default class Validator {
     }
 
     let validate = () => {
-      if (value != null && type.validate != null) {
-        type.validate(value, result)
-      }
+      if (value == null) { return }
+      type.validate?.(value, result)
+      type.options.validate?.(value, result)
     }
 
     // Wrap in the custom callback if specified.
