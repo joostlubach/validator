@@ -36,13 +36,13 @@ export interface PolymorphicOptions<SM extends ObjectSchemaMap> extends Omit<Typ
   schemas:     SM
 }
 
-export default function object<T extends Record<string, any>>(options: AnonymousObjectOptions<T> & {required: false}): OptionalType<T, AnonymousObjectOptions<T>>
 export default function object<S extends ObjectSchema>(options: MonomorphicOptions<S> & {required: false}): OptionalType<SchemaInstance<S>, MonomorphicOptions<S>>
+export default function object<T extends Record<string, any>>(options: AnonymousObjectOptions<T> & {required: false}): OptionalType<T, AnonymousObjectOptions<T>>
 export default function object<SM extends ObjectSchemaMap>(options: PolymorphicOptions<SM> & {required: false}): OptionalType<PolySchemaInstance<SM>, PolymorphicOptions<SM>>
 
-export default function object<T extends Record<string, any>>(options?: AnonymousObjectOptions<T>): RequiredType<T, AnonymousObjectOptions<T>>
-export default function object<S extends ObjectSchema>(options: MonomorphicOptions<S>): RequiredType<SchemaInstance<S>, MonomorphicOptions<S>>
 export default function object<SM extends ObjectSchemaMap>(options: PolymorphicOptions<SM>): RequiredType<PolySchemaInstance<SM>, PolymorphicOptions<SM>>
+export default function object<S extends ObjectSchema>(options: MonomorphicOptions<S>): RequiredType<SchemaInstance<S>, MonomorphicOptions<S>>
+export default function object<T extends Record<string, any>>(options?: AnonymousObjectOptions<T>): RequiredType<T, AnonymousObjectOptions<T>>
 
 export default function object(options: ObjectOptions<any> = {}): Type<any, any> {
   const isPolymorphic = 'polymorphic' in options && !!options.polymorphic
